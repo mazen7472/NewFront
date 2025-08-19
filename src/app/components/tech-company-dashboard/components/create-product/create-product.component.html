@@ -1,0 +1,109 @@
+﻿<div class="create-product-container">
+  <h2 class="section-title">Create New Product</h2>
+
+  <!-- Product Form: show only if product not created -->
+  <form *ngIf="!productCreated" [formGroup]="form" (ngSubmit)="onSubmit()" novalidate>
+    <!-- Basic Fields -->
+    <div *ngFor="let field of ['name','price','discountPrice','stock','subCategoryName']">
+      <div class="form-group">
+        <label [for]="field">{{ field | titlecase }}</label>
+        <input
+          [formControlName]="field"
+          [id]="field"
+          [type]="field.includes('price') || field === 'stock' ? 'number' : 'text'"
+        />
+      </div>
+    </div>
+
+    <!-- Description -->
+    <div class="form-group">
+      <label for="description">Description</label>
+      <textarea id="description" formControlName="description"></textarea>
+    </div>
+
+    <!-- Category -->
+    <div class="form-group">
+      <label for="category">Category</label>
+      <select id="category" formControlName="category">
+        <option *ngFor="let cat of categories" [value]="cat">{{ cat }}</option>
+      </select>
+    </div>
+
+    <!-- Specifications -->
+    <div formArrayName="specifications" class="nested-group">
+      <h3>Specifications</h3>
+      <div
+        *ngFor="let spec of specifications.controls; let i = index"
+        [formGroupName]="i"
+        class="nested-item"
+      >
+        <input formControlName="key" placeholder="Key" />
+        <input formControlName="value" placeholder="Value" />
+        <button type="button" (click)="removeSpecification(i)">Remove</button>
+      </div>
+      <button type="button" class="add-btn" (click)="addSpecification()">Add Specification</button>
+    </div>
+
+    <!-- Warranties -->
+    <div formArrayName="warranties" class="nested-group">
+      <h3>Warranties</h3>
+      <div
+        *ngFor="let war of warranties.controls; let i = index"
+        [formGroupName]="i"
+        class="nested-item"
+      >
+        <!-- Warranty Type -->
+        <input 
+          formControlName="type" 
+          placeholder="Type (e.g., Manufacturer, Seller)" 
+          type="text"
+        />
+
+        <!-- Description -->
+        <input 
+          formControlName="description" 
+          placeholder="Description" 
+          type="text"
+        />
+
+        <!-- Duration -->
+        <input 
+          formControlName="durationInMonths" 
+          type="text" 
+          placeholder="Duration" 
+        />
+
+        <!-- Start Date -->
+        <input 
+          formControlName="startDate" 
+          type="date" 
+          placeholder="Start Date" 
+        />
+
+        <!-- End Date -->
+        <input 
+          formControlName="endDate" 
+          type="date" 
+          placeholder="End Date" 
+        />
+
+        <button type="button" (click)="removeWarranty(i)">Remove</button>
+      </div>
+
+      <button type="button" class="add-btn" (click)="addWarranty()">Add Warranty</button>
+    </div>
+
+    <!-- Submit -->
+    <button class="submit-btn" type="submit" [disabled]="submitting || form.invalid">
+      Create Product
+    </button>
+  </form>
+
+  <!-- Add images: show only after product is created -->
+<app-add-images
+  *ngIf="productCreated"
+  [productIdForImages]="productIdForImages"
+  (resetForm)="onResetForm()"
+></app-add-images>
+
+</div>

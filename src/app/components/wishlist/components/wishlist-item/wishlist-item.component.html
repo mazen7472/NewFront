@@ -1,0 +1,27 @@
+<div class="product-card-wrapper">
+  <div class="product-card shadow-glow rounded-4">
+    <div class="card-img-wrapper position-relative">
+      <img
+        [src]="getProductImageUrl()"
+        [alt]="item.productName || 'Product Image'"
+        class="card-img-top rounded-4"
+        (error)="onImageError($event)"
+      />
+      <span class="badge-new">NEW</span>
+    </div>
+
+    <div class="card-body">
+      <h5 class="card-title text-truncate">{{ item.productName || 'Unnamed Product' }}</h5>
+    </div>
+  </div>
+
+  <!-- Buttons below the card, full width -->
+  <div class="product-card-actions mt-3 d-flex flex-column gap-2 w-100">
+    <button class="btn btn-outline-primary btn-glow rounded-pill w-100" (click)="onAddToCartClick()">
+      <i class="bi bi-cart me-1"></i> Add to Cart
+    </button>
+    <button class="btn btn-outline-danger btn-glow rounded-pill w-100" (click)="onRemoveClick()">
+      <i class="bi bi-trash me-1"></i> Remove
+    </button>
+  </div>
+</div>

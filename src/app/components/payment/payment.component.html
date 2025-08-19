@@ -1,0 +1,10 @@
+<form [formGroup]="paymentForm" (ngSubmit)="pay()">
+  <label>Amount: <input type="number" formControlName="amount"></label>
+  <label>Currency: <input type="text" formControlName="currency"></label>
+
+  <div #cardElement style="border: 1px solid #ccc; padding: 10px; margin-top: 10px;"></div>
+
+  <button type="submit" [disabled]="paymentForm.invalid">Pay</button>
+</form>
+
+<p *ngIf="message">{{ message }}</p> 

@@ -1,0 +1,16 @@
+<div class="article-wrapper" *ngIf="article">
+  <h1 class="article-title">{{ article.title }}</h1>
+  <p class="article-date">{{ article.date }}</p>
+  <img [src]="article.img" [alt]="article.title" class="article-image img-fluid" />
+  <p class="article-description">{{ article.description }}</p>
+  <div class="article-content">
+    {{ article.content }}
+  </div>
+  <a routerLink="/blog" class="back-button">← Back to Blog</a>
+</div>
+
+<div class="article-wrapper" *ngIf="!article">
+  <h2 class="article-title">Article Not Found</h2>
+  <p class="article-description">The requested article does not exist or was removed.</p>
+  <a routerLink="/blog" class="back-button">← Return to Blog</a>
+</div>

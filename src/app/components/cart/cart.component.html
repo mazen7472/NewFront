@@ -1,0 +1,119 @@
+<div class="section cart-page">
+  <div class="container">
+    <!-- Header -->
+    <div class="text-center mb-12">
+      <h1 class="section-title">Shopping Cart</h1>
+      <p class="section-subtitle mx-auto">Review your items and proceed to checkout</p>
+    </div>
+
+    <!-- Cart Content -->
+    <ng-container *ngIf="CartItems.length > 0; else emptyCart">
+      <div class="cart-grid">
+        <!-- Cart Items -->
+        <div class="cart-items">
+          <div class="card cart-card">
+            <div class="card-header">
+              <h2 class="card-title">Cart Items ({{ CartItems.length }})</h2>
+            </div>
+            <div class="card-body">
+              <div class="cart-item-list">
+                <div *ngFor="let item of CartItems; let i = index" class="cart-item">
+                  <div class="cart-item-image-wrapper">
+                    <img 
+                      [src]="item.isCustomBuild ? (item.imageUrl || 'assets/placeholder.jpg') : getCartItemImageUrl(item)"
+                      [alt]="item.productName || 'Product Image'" 
+                      (error)="onImageError($event)"
+                    />
+                    <span *ngIf="item.isCustomBuild" class="badge custom-badge"><i class="bi bi-tools me-1"></i> Custom</span>
+                  </div>
+
+                  <div class="cart-item-details">
+                    <h3 class="cart-item-title">{{ item.productName }}</h3>
+                    <div class="cart-item-meta">
+                      <div class="quantity-controls d-flex align-items-center mb-2">
+                        <button class="btn btn-sm btn-outline-secondary me-2" (click)="decreaseQuantity(item)" [disabled]="isCheckingOut">-</button>
+                        <span class="quantity-number">{{ item.quantity }}</span>
+                        <button class="btn btn-sm btn-outline-secondary ms-2" (click)="increaseQuantity(item)" [disabled]="isCheckingOut">+</button>
+                      </div>
+                      <span>Price: <strong class="price">{{ item.isCustomBuild ? item.productTotal : item.itemTotal | currency:'EGP' }}</strong></span>
+                      <span *ngIf="item.quantity > 1" class="text-secondary">({{ item.isCustomBuild ? item.unitPrice : item.price | currency:'EGP' }} each)</span>
+                    </div>
+                  </div>
+
+                  <div class="cart-item-actions">
+                    <button class="remove-btn" (click)="removeItem(item.productId)" [disabled]="isCheckingOut">
+                      <i class="bi bi-trash me-1"></i> Remove
+                    </button>
+                  </div>
+                </div>
+              </div>
+            </div>
+          </div>
+        </div>
+
+        <!-- Cart Summary -->
+        <div class="cart-summary-card">
+          <div class="card sticky top-4">
+            <div class="card-header">
+              <h2 class="card-title">Order Summary</h2>
+            </div>
+            <div class="card-body">
+              <div class="summary-item">
+                <span>Subtotal</span>
+                <span>{{ getTotal() | currency:'EGP' }}</span>
+              </div>
+              <div class="summary-item">
+                <span>Shipping</span>
+                <span class="text-success">Free</span>
+              </div>
+              <div class="divider"></div>
+              <div class="summary-item total">
+                <span>Total</span>
+                <span>{{ getTotal() | currency:'EGP' }}</span>
+              </div>
+
+              <!-- Checkout Buttons -->
+              <div class="checkout-actions d-flex flex-column gap-2">
+                <!-- Regular Checkout -->
+                <button class="checkout-btn" (click)="checkout()" [disabled]="isCheckingOut">
+                  <ng-container *ngIf="isCheckingOut; else checkoutLabel">
+                    <div class="spinner"></div> Processing...
+                  </ng-container>
+                  <ng-template #checkoutLabel>
+                    <i class="bi bi-credit-card me-2"></i> Proceed to Checkout
+                  </ng-template>
+                </button>
+
+                <!-- Stripe Checkout -->
+                <button class="btn btn-success w-full" (click)="checkoutWithStripe()" [disabled]="isCheckingOut || CartItems.length === 0">
+                  <i class="bi bi-basket2 me-2"></i> Pay with Stripe
+                </button>
+
+                <!-- Clear Cart -->
+                <button class="btn btn-outline w-full clear-btn" (click)="clearCart()" [disabled]="isCheckingOut">
+                  <i class="bi bi-trash me-2"></i> Clear Cart
+                </button>
+              </div>
+            </div>
+          </div>
+        </div>
+      </div>
+    </ng-container>
+
+    <!-- Empty Cart Template -->
+    <ng-template #emptyCart>
+      <div class="empty-cart-card">
+        <div class="empty-cart-body text-center">
+          <div class="empty-cart-icon">
+            <i class="bi bi-cart"></i>
+          </div>
+          <h2 class="empty-cart-title">Your cart is empty</h2>
+          <p class="empty-cart-text">Looks like you haven't added any items to your cart yet.</p>
+          <button class="continue-shopping-btn" routerLink="/products">
+            <i class="bi bi-arrow-left me-2"></i> Continue Shopping
+          </button>
+        </div>
+      </div>
+    </ng-template>
+  </div>
+</div>

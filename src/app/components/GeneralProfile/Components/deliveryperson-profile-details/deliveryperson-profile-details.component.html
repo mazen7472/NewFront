@@ -1,0 +1,8 @@
+<div *ngIf="deliveryPerson">
+  <h3>Delivery Person Details</h3>
+  <p><strong>Vehicle:</strong> {{ deliveryPerson.vehicleType }} - {{ deliveryPerson.vehicleNumber }}</p>
+  <p><strong>License:</strong> {{ deliveryPerson.license }}</p>
+  <p><strong>Available:</strong> {{ deliveryPerson.isAvailable ? 'Yes' : 'No' }}</p>
+  <p><strong>Deliveries:</strong> {{ deliveryPerson.deliveriesCount }}</p>
+  <p><strong>Offers:</strong> {{ deliveryPerson.offersCount }}</p>
+</div>

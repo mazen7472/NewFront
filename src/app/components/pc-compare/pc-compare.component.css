@@ -1,0 +1,515 @@
+/* Step indicator effect */
+.step-category {
+  transition: all 0.4s ease;
+}
+.step-category.completed {
+  opacity: 0.7;
+  transform: scale(0.95);
+  pointer-events: none;
+}
+
+/* Animate product cards */
+.animate-card {
+  animation: fadeInUp 0.5s ease-out;
+}
+
+/* Animate comparison table */
+.animate-compare {
+  animation: fadeInUp 0.7s ease-out;
+}
+
+
+
+/* === Compare Section Wrapper === */
+.compare.contact {
+  background-color: var(--content-bg);
+  border-radius: 20px;
+  padding: 3rem 2rem;
+  box-shadow: 0 0 25px var(--shadow-color);
+  backdrop-filter: blur(6px);
+  color: var(--text-primary);
+  position: relative;
+  z-index: 1;
+  overflow: hidden;
+}
+
+/* === Lead Text === */
+.compare .lead {
+  font-size: 1.25rem;
+  font-family: 'Orbitron', sans-serif;
+  background: linear-gradient(
+    to right,
+    rgba(76, 166, 255, 0.15),
+    rgba(127, 90, 240, 0.2),
+    rgba(255, 76, 76, 0.15)
+  );
+  padding: 1rem 1.5rem;
+  border-radius: 12px;
+  display: inline-block;
+  border: 1px solid var(--border-color);
+  box-shadow: 0 0 12px rgba(127, 90, 240, 0.15);
+  text-shadow: 0 0 6px rgba(127, 90, 240, 0.25);
+  transition: transform 0.3s ease, box-shadow 0.3s ease;
+  color: var(--text-primary);
+}
+
+.compare .lead:hover {
+  transform: scale(1.03);
+  box-shadow: 0 0 20px rgba(127, 90, 240, 0.35);
+}
+
+/* === Form Selects === */
+.compare .form-group label,
+.compare label {
+  color: var(--text-primary);
+  font-weight: 600;
+  margin-bottom: 0.5rem;
+  display: block;
+}
+
+.compare .form-select {
+  background-color: var(--input-bg);
+  color: var(--input-text);
+  border: 2px solid var(--input-border);
+  border-radius: 12px;
+  padding: 0.75rem 1rem;
+  font-size: 0.95rem;
+  background-image: url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' fill='%230d6efd' viewBox='0 0 16 16'%3E%3Cpath d='M1.5 5l6 6 6-6'/%3E%3C/svg%3E");
+  background-repeat: no-repeat;
+  background-position: right 1rem center;
+  background-size: 1rem;
+  padding-right: 3rem;
+  transition: all 0.3s ease;
+}
+
+.compare .form-select:focus {
+  border-color: var(--primary-color);
+  outline: none;
+  box-shadow: 0 0 10px var(--primary-color);
+}
+
+/* === Cards Row Layout === */
+.compare .cards-row {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 1.5rem;
+  margin-top: 2rem;
+  margin-bottom: 2rem;
+  justify-content: center;
+  align-items: center;
+}
+
+.compare .card {
+  flex: 1 1 280px;
+  max-width: 300px;
+  background-color: var(--card-bg);
+  border: 1px solid var(--border-color);
+  border-radius: 16px;
+  box-shadow: 0 4px 16px rgba(0, 0, 0, 0.2);
+  padding: 1.5rem;
+  text-align: center;
+  transition: transform 0.3s ease;
+}
+
+.compare .card:hover {
+  transform: translateY(-5px);
+}
+
+.compare .card img {
+  width: 100%;
+  max-height: 180px;
+  object-fit: contain;
+  border-radius: 0.75rem;
+  background-color: #fff;
+  padding: 1rem;
+  margin-bottom: 1rem;
+}
+
+.compare .card h5,
+.compare .card h6 {
+  font-size: 1.15rem;
+  font-weight: 700;
+  color: var(--text-primary);
+  margin-bottom: 0.5rem;
+}
+
+.compare .card p {
+  font-size: 0.95rem;
+  color: var(--text-primary);
+  margin: 0;
+}
+
+/* === Table Row Layout === */
+.compare .table-row {
+  margin-top: 2rem;
+}
+
+/* === Comparison Table === */
+.compare .table-responsive {
+  overflow-x: auto;
+  border-radius: 1rem;
+}
+
+.compare .table {
+  width: 100%;
+  background-color: var(--table-bg);
+  border-radius: 1rem;
+  overflow: hidden;
+  box-shadow: 0 0 16px var(--shadow-color);
+  border-collapse: separate;
+  border-spacing: 0;
+}
+
+.compare .table th,
+.compare .table td {
+  padding: 1rem;
+  font-size: 0.95rem;
+  vertical-align: middle;
+  border: 1px solid var(--table-border-color);
+  color: var(--text-primary);
+}
+
+.compare .table thead {
+  background-color: var(--table-header-bg);
+  font-weight: 600;
+  font-family: 'Orbitron', sans-serif;
+  text-shadow: 0 0 5px rgba(127, 90, 240, 0.3);
+}
+
+/* === Highlighting the better value === */
+.compare .text-success.fw-semibold {
+  background-color: rgba(127, 90, 240, 0.15);
+  border-radius: 8px;
+  padding: 0.4rem 0.6rem;
+  font-weight: 700 !important;
+  color: var(--accent-blue) !important;
+}
+
+/* === Reset Button === */
+.compare .btn-outline-secondary {
+  border-radius: 50px;
+  font-weight: 600;
+  color: var(--accent-red);
+  border: 2px solid var(--accent-red);
+  background-color: transparent;
+  padding: 0.6rem 1.5rem;
+  transition: all 0.3s ease;
+}
+
+.compare .btn-outline-secondary:hover {
+  background-color: var(--accent-red);
+  color: #000 !important;
+  box-shadow: 0 0 12px rgba(255, 76, 76, 0.5);
+  transform: scale(1.05);
+}
+
+
+/* === Table Base === */
+.table {
+  background-color: rgba(255, 255, 255, 0.05);
+  backdrop-filter: blur(8px);
+  border-radius: 12px;
+  overflow: hidden;
+  border-collapse: separate;
+  border-spacing: 0;
+  box-shadow: 0 10px 30px rgba(0, 0, 0, 0.2);
+  color: var(--text-primary);
+  margin-bottom: 1.5rem;
+}
+
+/* === Header === */
+.table thead {
+  background-color: rgba(0, 0, 0, 0.7);
+  color: var(--text-primary)!important;
+  font-weight: 600;
+}
+
+.table thead th {
+  padding: 1rem;
+  text-transform: uppercase;
+  font-size: 0.875rem;
+  letter-spacing: 0.05em;
+  border-bottom: 2px solid var(--accent-blue);
+}
+
+/* === Body === */
+.table tbody td {
+  padding: 0.9rem;
+  border-top: 1px solid rgba(255, 255, 255, 0.1);
+  font-size: 0.95rem;
+  color: var(--accent-blue);
+  background-color: rgba(255, 255, 255, 0.025);
+  transition: background-color 0.3s ease;
+}
+
+/* Row Hover */
+.table-hover tbody tr:hover {
+  background-color: rgba(0, 123, 255, 0.15);
+  color: var(--navbar-text);
+  transform: scale(1.0);
+  transition: transform 0.2s ease, background-color 0.2s ease;
+}
+
+/* === Alignment === */
+.table th, .table td {
+  text-align: center;
+  vertical-align: middle;
+}
+
+
+
+/* === Discount Text === */
+.table .text-success {
+  font-weight: 600;
+}
+
+/* === Smooth Transitions === */
+.table, .btn, .badge, .text-success, .text-danger {
+  transition: all 0.3s ease-in-out;
+}
+
+
+
+.table > :not(caption) > * > * {
+  color: var(--text-primary); 
+  background-color: transparent; 
+}
+
+/* === Enhanced Comparison Table Styles === */
+.compare .custom-compare-table {
+  background: linear-gradient(135deg, rgba(255, 255, 255, 0.1) 0%, rgba(255, 255, 255, 0.05) 100%);
+  backdrop-filter: blur(10px);
+  border-radius: 16px;
+  overflow: hidden;
+  border: 1px solid rgba(255, 255, 255, 0.2);
+  box-shadow: 0 15px 35px rgba(0, 0, 0, 0.3);
+}
+
+.compare .custom-compare-table thead th {
+  background: linear-gradient(135deg, var(--accent-blue) 0%, #4a90e2 100%);
+  color: white !important;
+  font-weight: 700;
+  text-transform: uppercase;
+  letter-spacing: 0.5px;
+  padding: 1.2rem 1rem;
+  border: none;
+  position: relative;
+}
+
+.compare .custom-compare-table thead th::after {
+  content: '';
+  position: absolute;
+  bottom: 0;
+  left: 0;
+  right: 0;
+  height: 2px;
+  background: linear-gradient(90deg, transparent 0%, rgba(255, 255, 255, 0.5) 50%, transparent 100%);
+}
+
+.compare .custom-compare-table tbody td {
+  padding: 1rem;
+  border: 1px solid rgba(255, 255, 255, 0.1);
+  transition: all 0.3s ease;
+  position: relative;
+}
+
+.compare .custom-compare-table tbody tr:hover {
+  background: rgba(127, 90, 240, 0.1);
+  transform: translateY(-2px);
+  box-shadow: 0 5px 15px rgba(0, 0, 0, 0.2);
+}
+
+/* === Better/Worse Value Highlighting === */
+.compare .text-success.fw-semibold.bg-success.bg-opacity-10 {
+  background: linear-gradient(135deg, rgba(40, 167, 69, 0.2) 0%, rgba(40, 167, 69, 0.1) 100%) !important;
+  border: 2px solid rgba(40, 167, 69, 0.3);
+  border-radius: 8px;
+  color: #28a745 !important;
+  font-weight: 700 !important;
+  position: relative;
+}
+
+.compare .text-success.fw-semibold.bg-success.bg-opacity-10::before {
+  content: '✓';
+  position: absolute;
+  top: -5px;
+  right: -5px;
+  background: #28a745;
+  color: white;
+  border-radius: 50%;
+  width: 20px;
+  height: 20px;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  font-size: 12px;
+  font-weight: bold;
+}
+
+.compare .text-danger.fw-semibold.bg-danger.bg-opacity-10 {
+  background: linear-gradient(135deg, rgba(220, 53, 69, 0.2) 0%, rgba(220, 53, 69, 0.1) 100%) !important;
+  border: 2px solid rgba(220, 53, 69, 0.3);
+  border-radius: 8px;
+  color: #dc3545 !important;
+  font-weight: 700 !important;
+  position: relative;
+}
+
+.compare .text-danger.fw-semibold.bg-danger.bg-opacity-10::before {
+  content: '✗';
+  position: absolute;
+  top: -5px;
+  right: -5px;
+  background: #dc3545;
+  color: white;
+  border-radius: 50%;
+  width: 20px;
+  height: 20px;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  font-size: 12px;
+  font-weight: bold;
+}
+
+/* === Enhanced Badge Styles === */
+.compare .badge {
+  padding: 0.5rem 0.8rem;
+  font-size: 0.8rem;
+  font-weight: 600;
+  border-radius: 20px;
+  text-transform: uppercase;
+  letter-spacing: 0.5px;
+  box-shadow: 0 2px 8px rgba(0, 0, 0, 0.2);
+  transition: all 0.3s ease;
+}
+
+.compare .badge:hover {
+  transform: translateY(-2px);
+  box-shadow: 0 4px 12px rgba(0, 0, 0, 0.3);
+}
+
+.compare .badge.bg-success {
+  background: linear-gradient(135deg, #28a745 0%, #20c997 100%) !important;
+  border: 1px solid rgba(40, 167, 69, 0.3);
+}
+
+.compare .badge.bg-warning {
+  background: linear-gradient(135deg, #ffc107 0%, #fd7e14 100%) !important;
+  border: 1px solid rgba(255, 193, 7, 0.3);
+  color: #212529 !important;
+}
+
+.compare .badge.bg-info {
+  background: linear-gradient(135deg, #17a2b8 0%, #6f42c1 100%) !important;
+  border: 1px solid rgba(23, 162, 184, 0.3);
+}
+
+.compare .badge.bg-secondary {
+  background: linear-gradient(135deg, #6c757d 0%, #495057 100%) !important;
+  border: 1px solid rgba(108, 117, 125, 0.3);
+}
+
+/* === Summary Cards === */
+.compare .card {
+  background: linear-gradient(135deg, rgba(255, 255, 255, 0.1) 0%, rgba(255, 255, 255, 0.05) 100%);
+  backdrop-filter: blur(10px);
+  border-radius: 12px;
+  border: 1px solid rgba(255, 255, 255, 0.2);
+  box-shadow: 0 8px 25px rgba(0, 0, 0, 0.2);
+  transition: all 0.3s ease;
+}
+
+.compare .card:hover {
+  transform: translateY(-5px);
+  box-shadow: 0 12px 35px rgba(0, 0, 0, 0.3);
+}
+
+.compare .card-header {
+  background: linear-gradient(135deg, var(--accent-blue) 0%, #4a90e2 100%);
+  color: white;
+  border-bottom: none;
+  border-radius: 12px 12px 0 0 !important;
+  padding: 1rem 1.5rem;
+}
+
+.compare .card-header h5 {
+  margin: 0;
+  font-weight: 700;
+  text-transform: uppercase;
+  letter-spacing: 0.5px;
+}
+
+.compare .card-body {
+  padding: 1.5rem;
+  color: var(--text-primary);
+}
+
+.compare .card.border-info .card-header {
+  background: linear-gradient(135deg, #17a2b8 0%, #6f42c1 100%);
+}
+
+/* === Performance Summary Stats === */
+.compare .d-flex.justify-content-between {
+  padding: 0.5rem 0;
+  border-bottom: 1px solid rgba(255, 255, 255, 0.1);
+}
+
+.compare .d-flex.justify-content-between:last-child {
+  border-bottom: none;
+}
+
+.compare .d-flex.justify-content-between span:first-child {
+  font-weight: 600;
+  color: var(--text-primary);
+}
+
+.compare .d-flex.justify-content-between .badge {
+  font-size: 0.9rem;
+  padding: 0.4rem 0.8rem;
+}
+
+/* === Responsive Design === */
+@media (max-width: 768px) {
+  .compare .custom-compare-table {
+    font-size: 0.8rem;
+  }
+  
+  .compare .custom-compare-table thead th,
+  .compare .custom-compare-table tbody td {
+    padding: 0.5rem;
+  }
+  
+  .compare .badge {
+    font-size: 0.7rem;
+    padding: 0.3rem 0.6rem;
+  }
+  
+  .compare .card-body {
+    padding: 1rem;
+  }
+}
+
+/* === Animation for Table Loading === */
+@keyframes fadeInUp {
+  from {
+    opacity: 0;
+    transform: translateY(20px);
+  }
+  to {
+    opacity: 1;
+    transform: translateY(0);
+  }
+}
+
+.compare .custom-compare-table {
+  animation: fadeInUp 0.6s ease-out;
+}
+
+.compare .card {
+  animation: fadeInUp 0.6s ease-out 0.2s both;
+}
+
+.compare .card:nth-child(2) {
+  animation-delay: 0.4s;
+}

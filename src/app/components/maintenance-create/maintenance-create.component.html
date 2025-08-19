@@ -1,0 +1,155 @@
+<div class="maintenance-create-container">
+  <div class="row justify-content-center">
+    <div class="col-lg-8">
+      <div class="card">
+        <div class="card-header">
+          <h3 class="mb-0">
+            <i class="bi bi-wrench me-2"></i>Create Maintenance Request
+          </h3>
+        </div>
+        <div class="card-body">
+          <form [formGroup]="maintenanceForm" (ngSubmit)="onSubmit()" novalidate>
+            
+            <!-- Service Type -->
+            <div class="mb-3">
+              <label for="serviceType" class="form-label">Service Type *</label>
+              <select 
+                id="serviceType" 
+                class="form-select" 
+                formControlName="serviceType"
+                [class.is-invalid]="getFieldError('serviceType')"
+              >
+                <option value="">Select a service type</option>
+                @for (serviceType of serviceTypes; track serviceType) {
+                  <option [value]="serviceType">{{ serviceType }}</option>
+                }
+              </select>
+              @if (getFieldError('serviceType')) {
+                <div class="invalid-feedback">
+                  {{ getFieldError('serviceType') }}
+                </div>
+              }
+            </div>
+
+            <!-- Priority -->
+            <div class="mb-3">
+              <label for="priority" class="form-label">Priority *</label>
+              <select 
+                id="priority" 
+                class="form-select" 
+                formControlName="priority"
+                [class.is-invalid]="getFieldError('priority')"
+              >
+                @for (priority of priorities; track priority) {
+                  <option [value]="priority">{{ priority }}</option>
+                }
+              </select>
+              @if (getFieldError('priority')) {
+                <div class="invalid-feedback">
+                  {{ getFieldError('priority') }}
+                </div>
+              }
+            </div>
+
+            <!-- Description -->
+            <div class="mb-3">
+              <label for="description" class="form-label">Description *</label>
+              <textarea 
+                id="description" 
+                class="form-control" 
+                rows="4"
+                placeholder="Please describe your issue in detail..."
+                formControlName="description"
+                [class.is-invalid]="getFieldError('description')"
+              ></textarea>
+              @if (getFieldError('description')) {
+                <div class="invalid-feedback">
+                  {{ getFieldError('description') }}
+                </div>
+              }
+              <div class="form-text">
+                Provide detailed information about the issue you're experiencing.
+              </div>
+            </div>
+
+            <!-- Address -->
+            <div class="mb-3">
+              <label for="address" class="form-label">Service Address *</label>
+              <textarea 
+                id="address" 
+                class="form-control" 
+                rows="2"
+                placeholder="Enter the address where service is needed..."
+                formControlName="address"
+                [class.is-invalid]="getFieldError('address')"
+              ></textarea>
+              @if (getFieldError('address')) {
+                <div class="invalid-feedback">
+                  {{ getFieldError('address') }}
+                </div>
+              }
+            </div>
+
+            <!-- Phone -->
+            <div class="mb-3">
+              <label for="phone" class="form-label">Contact Phone *</label>
+              <input 
+                type="tel" 
+                id="phone" 
+                class="form-control" 
+                placeholder="01XXXXXXXXX"
+                formControlName="phone"
+                [class.is-invalid]="getFieldError('phone')"
+              />
+              @if (getFieldError('phone')) {
+                <div class="invalid-feedback">
+                  {{ getFieldError('phone') }}
+                </div>
+              }
+              <div class="form-text">
+                We'll use this number to contact you about your request.
+              </div>
+            </div>
+
+            <!-- Priority Info -->
+            <div class="alert alert-info">
+              <h6 class="alert-heading">
+                <i class="bi bi-info-circle me-2"></i>Priority Guidelines
+              </h6>
+              <ul class="mb-0">
+                <li><strong>Low:</strong> General maintenance, non-urgent issues</li>
+                <li><strong>Medium:</strong> Minor problems affecting functionality</li>
+                <li><strong>High:</strong> Significant issues affecting work</li>
+                <li><strong>Critical:</strong> System down, urgent business impact</li>
+              </ul>
+            </div>
+
+            <!-- Submit Buttons -->
+            <div class="d-flex gap-2">
+              <button 
+                type="submit" 
+                class="btn btn-primary"
+                [disabled]="submitting"
+              >
+                @if (submitting) {
+                  <span class="spinner-border spinner-border-sm me-2" role="status"></span>
+                  Creating Request...
+                } @else {
+                  <i class="bi bi-check-circle me-2"></i>Create Request
+                }
+              </button>
+              
+              <button 
+                type="button" 
+                class="btn btn-outline-secondary"
+                routerLink="/maintenance/history"
+              >
+                <i class="bi bi-arrow-left me-2"></i>Cancel
+              </button>
+            </div>
+          </form>
+        </div>
+      </div>
+    </div>
+  </div>
+</div> 

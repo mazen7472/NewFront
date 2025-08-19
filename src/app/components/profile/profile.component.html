@@ -1,0 +1,770 @@
+<div class="profile-container">
+  <!-- Loading State -->
+  @if (loading) {
+    <div class="loading-state">
+      <div class="loading-spinner">
+        <div class="spinner"></div>
+      </div>
+      <p class="loading-text">Loading profile...</p>
+    </div>
+  }
+
+  <!-- Error State -->
+  @if (error && !loading) {
+    <div class="error-state">
+      <div class="error-card">
+        <i class="bi bi-exclamation-triangle error-icon"></i>
+        <h3 class="error-title">Oops! Something went wrong</h3>
+        <p class="error-message">{{ error }}</p>
+        <button class="retry-btn" (click)="loadUserProfile()">
+          <i class="bi bi-arrow-clockwise me-2"></i>
+          Try Again
+        </button>
+      </div>
+    </div>
+  }
+
+  <!-- Profile Content -->
+  @if (userData && !loading) {
+    <div class="profile-layout">
+      <!-- Page Header -->
+      <div class="content-header">
+        <div>
+          <h1 class="section-title">User Profile</h1>
+          <p class="section-subtitle">Manage your account and view your information</p>
+        </div>
+        <div class="date-display">
+          <i class="bi bi-calendar3 me-2"></i>
+          {{ currentDate | date:'mediumDate' }}
+        </div>
+      </div>
+
+      <!-- Profile Header -->
+      <div class="profile-header">
+        <div class="header-card">
+          <div class="profile-avatar-section">
+            <div class="profile-avatar">
+              @if (profilePhotoUrl) {
+              <img 
+                [src]="profilePhotoUrl" 
+                [alt]="userData.name || userData.fullName"
+                class="profile-photo"
+                (error)="onImageError($event)"
+              />
+              } @else {
+              <i class="bi bi-person-circle avatar-icon"></i>
+              }
+              <div class="status-indicator online"></div>
+            </div>
+            <div class="profile-info">
+              <h2 class="profile-name">{{ userData.name || userData.fullName }}</h2>
+              <p class="profile-email">{{ userData.email }}</p>
+              <div class="profile-meta">
+                <span class="meta-item">
+                  <i class="bi bi-calendar3 me-1"></i>
+                  Member since {{ userData.registrationDate | date:'MMM yyyy' }}
+                </span>
+                <span class="meta-item">
+                  <i class="bi bi-clock me-1"></i>
+                  Last login {{ userData.lastLoginDate | date:'MMM d, yyyy' }}
+                </span>
+              </div>
+            </div>
+          </div>
+          
+          <!-- Role Badges -->
+          <div class="role-section">
+            <h3 class="role-title">Your Roles</h3>
+            <div class="role-badges w-75 m-auto">
+              @for (role of userRoles; track role) {
+                <span class="role-badge" [ngClass]="getRoleBadgeClass(role)">
+                  <i class="bi me-1" [ngClass]="getRoleIcon(role)"></i>
+                  {{ role }}
+                </span>
+              }
+            </div>
+          </div>
+
+          <!-- Primary Dashboard Access -->
+          @if (hasAnyDashboardAccess()) {
+            <div class="dashboard-access">
+              <h3 class="dashboard-title">Quick Dashboard Access</h3>
+              <div class="dashboard-buttons">
+                @if (isAdmin()) {
+                  <a [routerLink]="'/dashboard'" class="dashboard-btn primary">
+                    <i class="bi bi-speedometer2 me-2"></i>
+                    Admin Dashboard
+                  </a>
+                }
+                @if (isTechCompany()) {
+                  <a [routerLink]="'/tech-company'" class="dashboard-btn primary">
+                    <i class="bi bi-tools me-2"></i>
+                    Tech Company Dashboard
+                  </a>
+                }
+                @if (isDeliveryPerson()) {
+                  <a [routerLink]="'/delivery'" class="dashboard-btn primary">
+                    <i class="bi bi-truck me-2"></i>
+                    Delivery Dashboard
+                  </a>
+                }
+                @if (isCustomer()) {
+                  <a [routerLink]="'/customer'" class="dashboard-btn primary">
+                    <i class="bi bi-person me-2"></i>
+                    Customer Dashboard
+                  </a>
+                }
+              </div>
+            </div>
+          }
+        </div>
+      </div>
+
+      <!-- Available Dashboards Section -->
+      <div class="available-dashboards-section">
+        <div class="section-header">
+          <h3 class="section-title">
+            <i class="bi bi-grid-3x3-gap me-2"></i>
+            Your Available Dashboards
+          </h3>
+          <p class="section-subtitle text-center w-100 mx-auto">Access dashboards based on your roles and permissions</p>
+        </div>
+        
+        <div class="dashboards-grid">
+          <!-- Admin Dashboard - Only show if user has Admin role -->
+          @if (isAdmin()) {
+            <div class="dashboard-card available">
+              <div class="dashboard-card-header">
+                <i class="bi bi-shield-check dashboard-icon"></i>
+                <h4 class="dashboard-card-title">Admin Dashboard</h4>
+              </div>
+              <p class="dashboard-description">Complete system administration and management</p>
+              <div class="dashboard-features">
+                <span class="feature-tag">User Management</span>
+                <span class="feature-tag">Product Management</span>
+                <span class="feature-tag">Analytics</span>
+                <span class="feature-tag">Reports</span>
+              </div>
+              <a routerLink="/dashboard" class="dashboard-card-btn">
+                <i class="bi bi-arrow-right me-2"></i>
+                Access Dashboard
+              </a>
+            </div>
+          }
+
+          <!-- Tech Company Dashboard - Only show if user has TechCompany role -->
+          @if (isTechCompany()) {
+            <div class="dashboard-card available">
+              <div class="dashboard-card-header">
+                <i class="bi bi-tools dashboard-icon"></i>
+                <h4 class="dashboard-card-title">Tech Company Dashboard</h4>
+              </div>
+              <p class="dashboard-description">Manage products, services, and company operations</p>
+              <div class="dashboard-features">
+                <span class="feature-tag">Product Management</span>
+                <span class="feature-tag">Maintenance Requests</span>
+                <span class="feature-tag">PC Assembly</span>
+                <span class="feature-tag">Earnings</span>
+              </div>
+              <a routerLink="/tech-company" class="dashboard-card-btn">
+                <i class="bi bi-arrow-right me-2"></i>
+                Access Dashboard
+              </a>
+            </div>
+          }
+
+          <!-- Delivery Person Dashboard - Only show if user has DeliveryPerson role -->
+          @if (isDeliveryPerson()) {
+            <div class="dashboard-card available">
+              <div class="dashboard-card-header">
+                <i class="bi bi-truck dashboard-icon"></i>
+                <h4 class="dashboard-card-title">Delivery Dashboard</h4>
+              </div>
+              <p class="dashboard-description">Manage deliveries and track performance</p>
+              <div class="dashboard-features">
+                <span class="feature-tag">Active Deliveries</span>
+                <span class="feature-tag">Delivery History</span>
+                <span class="feature-tag">Earnings</span>
+                <span class="feature-tag">Performance</span>
+              </div>
+              <a routerLink="/delivery" class="dashboard-card-btn">
+                <i class="bi bi-arrow-right me-2"></i>
+                Access Dashboard
+              </a>
+            </div>
+          }
+          
+          <!-- Customer Dashboard - Only show if user has Customer role -->
+          @if (isCustomer()) {
+            <div class="dashboard-card available">
+              <div class="dashboard-card-header">
+                <i class="bi bi-person dashboard-icon"></i>
+                <h4 class="dashboard-card-title">Customer Dashboard</h4>
+              </div>
+              <p class="dashboard-description">Manage orders, wishlist, and account settings</p>
+              <div class="dashboard-features">
+                <span class="feature-tag">My Orders</span>
+                <span class="feature-tag">Wishlist</span>
+                <span class="feature-tag">Maintenance</span>
+                <span class="feature-tag">PC Assembly</span>
+              </div>
+              <a routerLink="/customer" class="dashboard-card-btn">
+                <i class="bi bi-arrow-right me-2"></i>
+                Access Dashboard
+              </a>
+            </div>
+          }
+
+          <!-- No Dashboards Available Message -->
+          @if (!hasAnyDashboardAccess()) {
+            <div class="no-dashboards-message">
+              <div class="no-dashboards-card">
+                <i class="bi bi-exclamation-triangle no-dashboards-icon"></i>
+                <h4 class="no-dashboards-title">No Dashboards Available</h4>
+                <p class="no-dashboards-description">
+                  You don't have access to any dashboards yet. Please contact an administrator to assign appropriate roles.
+                </p>
+                <div class="no-dashboards-actions">
+                  <button class="btn btn-outline-primary" (click)="contactAdmin()">
+                    <i class="bi bi-envelope me-2"></i>
+                    Contact Admin
+                  </button>
+                </div>
+              </div>
+            </div>
+          }
+        </div>
+      </div>
+
+      <!-- Stats Overview -->
+      <div class="stats-overview">
+        <div class="stats-grid">
+          <div class="stat-card">
+            <div class="stat-content">
+              <div class="stat-info">
+                <h3 class="stat-number">{{ totalOrders || 0 }}</h3>
+                <p class="stat-label">Total Orders</p>
+                <div class="stat-change positive">
+                  <i class="bi bi-arrow-up"></i>
+                  <span>+15% this month</span>
+                </div>
+              </div>
+              <div class="stat-icon">
+                <i class="bi bi-cart-check"></i>
+              </div>
+            </div>
+            <div class="stat-progress">
+              <div class="progress-circle" [style.--progress]="'85%'">
+                <svg viewBox="0 0 36 36">
+                  <path d="M18 2.0845 a 15.9155 15.9155 0 0 1 0 31.831 a 15.9155 15.9155 0 0 1 0 -31.831"/>
+                  <path d="M18 2.0845 a 15.9155 15.9155 0 0 1 0 31.831 a 15.9155 15.9155 0 0 1 0 -31.831"/>
+                </svg>
+                <span class="progress-text">85%</span>
+              </div>
+            </div>
+          </div>
+
+          <div class="stat-card">
+            <div class="stat-content">
+              <div class="stat-info">
+                <h3 class="stat-number">{{ activeOrders || 0 }}</h3>
+                <p class="stat-label">Active Orders</p>
+                <div class="stat-change info">
+                  <i class="bi bi-clock"></i>
+                  <span>In progress</span>
+                </div>
+              </div>
+              <div class="stat-icon">
+                <i class="bi bi-clock-history"></i>
+              </div>
+            </div>
+            <div class="stat-progress">
+              <div class="progress-circle" [style.--progress]="'60%'">
+                <svg viewBox="0 0 36 36">
+                  <path d="M18 2.0845 a 15.9155 15.9155 0 0 1 0 31.831 a 15.9155 15.9155 0 0 1 0 -31.831"/>
+                  <path d="M18 2.0845 a 15.9155 15.9155 0 0 1 0 31.831 a 15.9155 15.9155 0 0 1 0 -31.831"/>
+                </svg>
+                <span class="progress-text">60%</span>
+              </div>
+            </div>
+          </div>
+
+          <div class="stat-card">
+            <div class="stat-content">
+              <div class="stat-info">
+                <h3 class="stat-number">{{ totalWishlist || 0 }}</h3>
+                <p class="stat-label">Wishlist Items</p>
+                <div class="stat-change positive">
+                  <i class="bi bi-heart"></i>
+                  <span>Saved items</span>
+                </div>
+              </div>
+              <div class="stat-icon">
+                <i class="bi bi-heart"></i>
+              </div>
+            </div>
+            <div class="stat-progress">
+              <div class="progress-circle" [style.--progress]="'45%'">
+                <svg viewBox="0 0 36 36">
+                  <path d="M18 2.0845 a 15.9155 15.9155 0 0 1 0 31.831 a 15.9155 15.9155 0 0 1 0 -31.831"/>
+                  <path d="M18 2.0845 a 15.9155 15.9155 0 0 1 0 31.831 a 15.9155 15.9155 0 0 1 0 -31.831"/>
+                </svg>
+                <span class="progress-text">45%</span>
+              </div>
+            </div>
+          </div>
+
+          <div class="stat-card">
+            <div class="stat-content">
+              <div class="stat-info">
+                <h3 class="stat-number">{{ maintenanceRequests || 0 }}</h3>
+                <p class="stat-label">Maintenance Requests</p>
+                <div class="stat-change warning">
+                  <i class="bi bi-tools"></i>
+                  <span>Pending review</span>
+                </div>
+              </div>
+              <div class="stat-icon">
+                <i class="bi bi-tools"></i>
+              </div>
+            </div>
+            <div class="stat-progress">
+              <div class="progress-circle" [style.--progress]="'30%'">
+                <svg viewBox="0 0 36 36">
+                  <path d="M18 2.0845 a 15.9155 15.9155 0 0 1 0 31.831 a 15.9155 15.9155 0 0 1 0 -31.831"/>
+                  <path d="M18 2.0845 a 15.9155 15.9155 0 0 1 0 31.831 a 15.9155 15.9155 0 0 1 0 -31.831"/>
+                </svg>
+                <span class="progress-text">30%</span>
+              </div>
+            </div>
+          </div>
+        </div>
+      </div>
+
+      <!-- Main Content Area -->
+      <div class="content-area">
+        <div class="content-grid">
+          <!-- Profile Details -->
+          <div class="profile-details">
+            <div class="details-card">
+              <div class="card-header">
+                <h3 class="card-title">
+                  <i class="bi bi-person me-2"></i>
+                  Profile Information
+                </h3>
+              </div>
+              <div class="card-body">
+                <div class="info-grid">
+                  <div class="info-item">
+                    <label class="info-label">Full Name</label>
+                    <p class="info-value">{{ userData.name || userData.fullName }}</p>
+                  </div>
+                  <div class="info-item">
+                    <label class="info-label">Email Address</label>
+                    <p class="info-value">{{ userData.email }}</p>
+                  </div>
+                  <div class="info-item">
+                    <label class="info-label">Phone Number</label>
+                    <p class="info-value">{{ userData.phone || userData.phoneNumber || 'Not provided' }}</p>
+                  </div>
+                  <div class="info-item">
+                    <label class="info-label">Address</label>
+                    <p class="info-value">{{ userData.address || 'Not provided' }}</p>
+                  </div>
+                  <div class="info-item">
+                    <label class="info-label">Member Since</label>
+                    <p class="info-value">{{ userData.registrationDate | date:'mediumDate' }}</p>
+                  </div>
+                  <div class="info-item">
+                    <label class="info-label">Last Login</label>
+                    <p class="info-value">{{ userData.lastLoginDate | date:'medium' }}</p>
+                  </div>
+                </div>
+              </div>
+            </div>
+
+            <!-- Role-Specific Information -->
+            @if (isTechCompany()) {
+              <div class="details-card">
+                <div class="card-header">
+                  <h3 class="card-title">
+                    <i class="bi bi-building me-2"></i>
+                    Tech Company Information
+                  </h3>
+                </div>
+                <div class="card-body">
+                  <div class="info-grid">
+                    <div class="info-item">
+                      <label class="info-label">Company Name</label>
+                      <p class="info-value">{{ roleSpecificData.techCompany.name }}</p>
+                    </div>
+                    <div class="info-item">
+                      <label class="info-label">Specialization</label>
+                      <p class="info-value">{{ roleSpecificData.techCompany.specialization || 'Not specified' }}</p>
+                    </div>
+                  </div>
+                </div>
+              </div>
+            }
+
+            @if (isDeliveryPerson()) {
+              <div class="details-card">
+                <div class="card-header">
+                  <h3 class="card-title">
+                    <i class="bi bi-truck me-2"></i>
+                    Delivery Information
+                  </h3>
+                </div>
+                <div class="card-body">
+                  <div class="info-grid">
+                    <div class="info-item">
+                      <label class="info-label">Vehicle Type</label>
+                      <p class="info-value">{{ roleSpecificData.deliveryPerson.vehicleType || 'Not specified' }}</p>
+                    </div>
+                    <div class="info-item">
+                      <label class="info-label">License Number</label>
+                      <p class="info-value">{{ roleSpecificData.deliveryPerson.licenseNumber || 'Not specified' }}</p>
+                    </div>
+                  </div>
+                </div>
+              </div>
+              <div class="update-container">
+  <h2>Update Delivery Person</h2>
+
+  <form [formGroup]="updateForm" (ngSubmit)="onSubmit()">
+
+    <div class="form-group">
+      <label>Phone Number</label>
+      <input formControlName="phoneNumber" type="text" class="form-control" />
+    </div>
+
+    <div class="form-group">
+      <label>City</label>
+      <input formControlName="city" type="text" class="form-control" />
+    </div>
+
+    <div class="form-group">
+      <label>Country</label>
+      <input formControlName="country" type="text" class="form-control" />
+    </div>
+
+    <div class="form-group">
+      <label>Vehicle Number</label>
+      <input formControlName="vehicleNumber" type="text" class="form-control" />
+    </div>
+
+    <div class="form-group">
+      <label>Vehicle Type</label>
+      <input formControlName="vehicleType" type="text" class="form-control" />
+    </div>
+
+    <div class="form-group">
+      <label>Vehicle Image (URL)</label>
+      <input formControlName="vehicleImage" type="text" class="form-control" />
+    </div>
+
+    <div class="form-group">
+      <label>Available?</label>
+      <input formControlName="isAvailable" type="checkbox" />
+    </div>
+
+    <div class="form-group">
+      <label>Account Status</label>
+      <select formControlName="accountStatus" class="form-control">
+        <option [ngValue]="statuses.Pending">Pending</option>
+        <option [ngValue]="statuses.Accepted">Accepted</option>
+        <option [ngValue]="statuses.Rejected">Rejected</option>
+      </select>
+    </div>
+
+    <button type="submit">
+      update
+    </button>
+  </form>
+
+  <p *ngIf="message">{{ message }}</p>
+</div>
+
+
+            }
+           <form [formGroup]="form" (ngSubmit)="submit()" class="form-card">
+  <h2 class="form-title">Add Location</h2>
+
+  <!-- postalCode -->
+  <div class="form-group floating-label">
+    <input type="text" id="postalCode" formControlName="postalCode" required placeholder=" " />
+    <label for="postalCode">Postal Code</label>
+    <div class="form-line"></div>
+  </div>
+
+  <!-- Map + Coordinates -->
+  <div class="map-row">
+
+
+    <div class="coords-container">
+      <!-- Latitude -->
+      <div class="form-group floating-label">
+        <input type="text" id="latitude" formControlName="latitude" readonly placeholder=" " />
+        <label for="latitude">Latitude</label>
+        <div class="form-line"></div>
+      </div>
+
+      <!-- Longitude -->
+      <div class="form-group floating-label">
+        <input type="text" id="longitude" formControlName="longitude" readonly placeholder=" " />
+        <label for="longitude">Longitude</label>
+        <div class="form-line"></div>
+      </div>
+    </div>
+  </div>
+    <div class="map-container">
+  <google-map
+  height="400px"
+  width="100%"
+  [center]="center"
+  [zoom]="zoom"
+  (mapClick)="setMarker($event)">
+  
+  <map-marker
+    *ngIf="markerPosition"
+    [position]="markerPosition"
+    [options]="{ draggable: true }"
+    (mapDragend)="setMarker($event)">
+  </map-marker>
+</google-map>
+    </div>
+  <!-- Submit Button -->
+  <div class="button-row">
+    <button type="submit" class="btn btn-primary px-4 py-2 pulse-effect">
+      <span class="submit-text">Submit</span>
+      <i class="bi bi-send-fill ms-2 submit-icon"></i>
+    </button>
+  </div>
+</form>
+          </div>
+
+          <!-- Quick Actions Sidebar -->
+          <div class="quick-actions">
+            <!-- Admin Panel -->
+            @if (isAdmin()) {
+              <div class="action-card">
+                <div class="card-header">
+                  <h3 class="card-title">
+                    <i class="bi bi-shield-check me-2"></i>
+                    Admin Actions
+                  </h3>
+                </div>
+                <div class="card-body">
+                  <div class="action-buttons">
+                    <a routerLink="/dashboard" class="action-btn primary">
+                      <i class="bi bi-speedometer2 me-2"></i>
+                      Admin Dashboard
+                    </a>
+                    <a routerLink="/dashboard/overview" class="action-btn secondary">
+                      <i class="bi bi-graph-up me-2"></i>
+                      Dashboard Overview
+                    </a>
+                    <a routerLink="/dashboard/customers" class="action-btn secondary">
+                      <i class="bi bi-people me-2"></i>
+                      Manage Customers
+                    </a>
+                    <a routerLink="/dashboard/tech-companies" class="action-btn secondary">
+                      <i class="bi bi-building me-2"></i>
+                      Tech Companies
+                    </a>
+                    <a routerLink="/dashboard/delivery-persons" class="action-btn secondary">
+                      <i class="bi bi-truck me-2"></i>
+                      Delivery Persons
+                    </a>
+                    <a routerLink="/dashboard/pending-products" class="action-btn secondary">
+                      <i class="bi bi-box me-2"></i>
+                      Pending Products
+                    </a>
+                    <a routerLink="/dashboard/orders" class="action-btn secondary">
+                      <i class="bi bi-cart me-2"></i>
+                      All Orders
+                    </a>
+                    <a routerLink="/notifications" class="action-btn secondary">
+                      <i class="bi bi-bell me-2"></i>
+                      Notifications
+                    </a>
+                    <a routerLink="/settings" class="action-btn secondary">
+                      <i class="bi bi-gear me-2"></i>
+                      Settings
+                    </a>
+                  </div>
+                </div>
+              </div>
+            }
+
+            <!-- Tech Company Panel -->
+            @if (isTechCompany()) {
+              <div class="action-card">
+                <div class="card-header">
+                  <h3 class="card-title">
+                    <i class="bi bi-tools me-2"></i>
+                    Tech Company Actions
+                  </h3>
+                </div>
+                <div class="card-body">
+                  <div class="action-buttons">
+                    <a routerLink="/tech-company/dashboard" class="action-btn primary">
+                      <i class="bi bi-speedometer2 me-2"></i>
+                      Tech Dashboard
+                    </a>
+                    <a routerLink="/tech-company/products" class="action-btn secondary">
+                      <i class="bi bi-box me-2"></i>
+                      My Products
+                    </a>
+                    <a routerLink="/tech-company/create-product" class="action-btn secondary">
+                      <i class="bi bi-plus-circle me-2"></i>
+                      Create Product
+                    </a>
+                    <a routerLink="/tech-company/maintenance-requests" class="action-btn secondary">
+                      <i class="bi bi-wrench me-2"></i>
+                      Maintenance Requests
+                    </a>
+                    <a routerLink="/tech-company/pc-assemblies" class="action-btn secondary">
+                      <i class="bi bi-cpu me-2"></i>
+                      PC Assembly Requests
+                    </a>
+                    <a routerLink="/notifications" class="action-btn secondary">
+                      <i class="bi bi-bell me-2"></i>
+                      Notifications
+                    </a>
+                    <a routerLink="/settings" class="action-btn secondary">
+                      <i class="bi bi-gear me-2"></i>
+                      Settings
+                    </a>
+                  </div>
+                </div>
+              </div>
+            }
+
+            <!-- Delivery Person Panel -->
+            @if (isDeliveryPerson()) {
+              <div class="action-card">
+                <div class="card-header">
+                  <h3 class="card-title">
+                    <i class="bi bi-truck me-2"></i>
+                    Delivery Actions
+                  </h3>
+                </div>
+                <div class="card-body">
+                  <div class="action-buttons">
+                    <a routerLink="/delivery/dashboard" class="action-btn primary">
+                      <i class="bi bi-speedometer2 me-2"></i>
+                      Delivery Dashboard
+                    </a>
+                    <a routerLink="/delivery/active-deliveries" class="action-btn secondary">
+                      <i class="bi bi-box-seam me-2"></i>
+                      Active Deliveries
+                    </a>
+                    <a routerLink="/delivery/delivery-history" class="action-btn secondary">
+                      <i class="bi bi-clock-history me-2"></i>
+                      Delivery History
+                    </a>
+                    <a routerLink="/notifications" class="action-btn secondary">
+                      <i class="bi bi-bell me-2"></i>
+                      Notifications
+                    </a>
+                    <a routerLink="/settings" class="action-btn secondary">
+                      <i class="bi bi-gear me-2"></i>
+                      Settings
+                    </a>
+                  </div>
+                </div>
+              </div>
+            }
+
+            <!-- Customer Panel -->
+            @if (isCustomer()) {
+              <div class="action-card">
+                <div class="card-header">
+                  <h3 class="card-title">
+                    <i class="bi bi-person me-2"></i>
+                    Customer Actions
+                  </h3>
+                </div>
+                <div class="card-body">
+                  <div class="action-buttons">
+                    <a routerLink="/customer/dashboard" class="action-btn primary">
+                      <i class="bi bi-speedometer2 me-2"></i>
+                      Customer Dashboard
+                    </a>
+                    <a routerLink="/order" class="action-btn secondary">
+                      <i class="bi bi-cart me-2"></i>
+                      My Orders
+                    </a>
+                    <a routerLink="/customer/order-history" class="action-btn secondary">
+                      <i class="bi bi-clock-history me-2"></i>
+                      Order History
+                    </a>
+                    <a routerLink="/wishlist" class="action-btn secondary">
+                      <i class="bi bi-heart me-2"></i>
+                      My Wishlist
+                    </a>
+                    <a routerLink="/cart" class="action-btn secondary">
+                      <i class="bi bi-cart-check me-2"></i>
+                      My Cart
+                    </a>
+                    <a routerLink="/customer/maintenance-requests" class="action-btn secondary">
+                      <i class="bi bi-wrench me-2"></i>
+                      Maintenance Requests
+                    </a>
+                    <a routerLink="/customer/create-maintenance" class="action-btn secondary">
+                      <i class="bi bi-plus-circle me-2"></i>
+                      Create Maintenance
+                    </a>
+                    <a routerLink="/pc-build" class="action-btn secondary">
+                      <i class="bi bi-plus-circle me-2"></i>
+                      Create PC Assembly
+                    </a>
+                    <a routerLink="/notifications" class="action-btn secondary">
+                      <i class="bi bi-bell me-2"></i>
+                      Notifications
+                    </a>
+                    <a routerLink="/customer/settings" class="action-btn secondary">
+                      <i class="bi bi-gear me-2"></i>
+                      Settings
+                    </a>
+                  </div>
+                </div>
+              </div>
+            }
+
+            <!-- Account Settings -->
+            <div class="action-card">
+              <div class="card-header">
+                <h3 class="card-title">
+                  <i class="bi bi-gear me-2"></i>
+                  Account Settings
+                </h3>
+              </div>
+              <div class="card-body">
+                <div class="action-buttons">
+                  <button class="action-btn secondary">
+                    <i class="bi bi-pencil me-2"></i>
+                    Edit Profile
+                  </button>
+                  <button class="action-btn secondary">
+                    <i class="bi bi-lock me-2"></i>
+                    Change Password
+                  </button>
+                  <button class="action-btn secondary">
+                    <i class="bi bi-bell me-2"></i>
+                    Notification Settings
+                  </button>
+                  <button class="action-btn danger" (click)="logout()">
+                    <i class="bi bi-box-arrow-right me-2"></i>
+                    Logout
+                  </button>
+                </div>
+              </div>
+            </div>
+          </div>
+        </div>
+      </div>
+    </div>
+  }
+</div> 

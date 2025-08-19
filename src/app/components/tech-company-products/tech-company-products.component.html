@@ -1,0 +1,170 @@
+<div class="tech-company-products-container">
+  <!-- Header -->
+  <div class="row mb-4">
+    <div class="col-12">
+      <div class="d-flex justify-content-between align-items-center">
+        <h2 class="mb-0">My Products</h2>
+        <a routerLink="/dashboard/create-product" class="btn btn-success">
+          <i class="bi bi-plus-circle me-2"></i>Add New Product
+        </a>
+      </div>
+    </div>
+  </div>
+
+  <!-- Stats Cards -->
+  <div class="row mb-4">
+    <div class="col-md-3 mb-3">
+      <div class="card stat-card">
+        <div class="card-body text-center">
+          <i class="bi bi-box stat-icon text-primary"></i>
+          <h3 class="stat-number">{{ stats.total }}</h3>
+          <p class="stat-label">Total Products</p>
+        </div>
+      </div>
+    </div>
+    <div class="col-md-3 mb-3">
+      <div class="card stat-card">
+        <div class="card-body text-center">
+          <i class="bi bi-check-circle stat-icon text-success"></i>
+          <h3 class="stat-number">{{ stats.approved }}</h3>
+          <p class="stat-label">Approved</p>
+        </div>
+      </div>
+    </div>
+    <div class="col-md-3 mb-3">
+      <div class="card stat-card">
+        <div class="card-body text-center">
+          <i class="bi bi-clock stat-icon text-warning"></i>
+          <h3 class="stat-number">{{ stats.pending }}</h3>
+          <p class="stat-label">Pending</p>
+        </div>
+      </div>
+    </div>
+    <div class="col-md-3 mb-3">
+      <div class="card stat-card">
+        <div class="card-body text-center">
+          <i class="bi bi-x-circle stat-icon text-danger"></i>
+          <h3 class="stat-number">{{ stats.rejected }}</h3>
+          <p class="stat-label">Rejected</p>
+        </div>
+      </div>
+    </div>
+  </div>
+
+  <!-- Loading State -->
+  @if (loading) {
+    <div class="text-center py-5">
+      <div class="spinner-border text-success" role="status">
+        <span class="visually-hidden">Loading...</span>
+      </div>
+      <p class="mt-2">Loading products...</p>
+    </div>
+  }
+
+  <!-- Error State -->
+  @if (error && !loading) {
+    <div class="alert alert-danger">
+      <i class="bi bi-exclamation-triangle me-2"></i>
+      {{ error }}
+    </div>
+  }
+
+  <!-- Products Grid -->
+  @if (products.length > 0 && !loading) {
+    <div class="row">
+      @for (product of products; track product.id) {
+        <div class="col-lg-4 col-md-6 mb-4">
+          <div class="card product-card">
+            <div class="product-image-container">
+              @if (product.imageUrl) {
+                <img [src]="product.imageUrl" [alt]="product.name" class="product-image">
+              } @else {
+                <div class="product-image-placeholder">
+                  <i class="bi" [ngClass]="getCategoryIcon(product.category)"></i>
+                </div>
+              }
+              <div class="product-status-badge">
+                <span class="badge" [ngClass]="getStatusBadgeClass(product.status)">
+                  {{ product.status }}
+                </span>
+              </div>
+            </div>
+            
+            <div class="card-body">
+              <h5 class="card-title">{{ product.name }}</h5>
+              <p class="card-text text-muted">{{ product.description }}</p>
+              
+              <div class="product-details">
+                <div class="row">
+                  <div class="col-6">
+                    <small class="text-muted">
+                      <i class="bi bi-tag me-1"></i>
+                      {{ product.category }}
+                    </small>
+                  </div>
+                  <div class="col-6">
+                    <small class="text-muted">
+                      <i class="bi bi-box me-1"></i>
+                      Stock: {{ product.stock }}
+                    </small>
+                  </div>
+                </div>
+                
+                <div class="row mt-2">
+                  <div class="col-6">
+                    <strong class="text-primary">${{ product.price }}</strong>
+                  </div>
+                  @if (product.discountPrice && product.discountPrice > 0) {
+                    <div class="col-6">
+                      <small class="text-success">
+                        <i class="bi bi-tag-fill me-1"></i>
+                        ${{ product.discountPrice }}
+                      </small>
+                    </div>
+                  }
+                </div>
+              </div>
+            </div>
+            
+            <div class="card-footer">
+              <div class="d-flex justify-content-between align-items-center">
+                <small class="text-muted">
+                  @if (product.status === 'Approved') {
+                    <i class="bi bi-check-circle-fill text-success me-1"></i>
+                    Ready for sale
+                  } @else if (product.status === 'Pending') {
+                    <i class="bi bi-clock text-warning me-1"></i>
+                    Awaiting approval
+                  } @else if (product.status === 'Rejected') {
+                    <i class="bi bi-x-circle text-danger me-1"></i>
+                    Needs revision
+                  }
+                </small>
+                <div class="btn-group">
+                  <button class="btn btn-outline-primary btn-sm" title="Edit Product">
+                    <i class="bi bi-pencil"></i>
+                  </button>
+                  <button class="btn btn-outline-info btn-sm" title="View Details">
+                    <i class="bi bi-eye"></i>
+                  </button>
+                  <button class="btn btn-outline-danger btn-sm" title="Delete Product">
+                    <i class="bi bi-trash"></i>
+                  </button>
+                </div>
+              </div>
+            </div>
+          </div>
+        </div>
+      }
+    </div>
+  } @else if (!loading && !error) {
+    <div class="text-center py-5">
+      <i class="bi bi-inbox display-4 text-muted"></i>
+      <h4 class="mt-3 text-muted">No Products Found</h4>
+      <p class="text-muted">You haven't added any products yet.</p>
+      <a routerLink="/dashboard/create-product" class="btn btn-success">
+        <i class="bi bi-plus-circle me-2"></i>Add Your First Product
+      </a>
+    </div>
+  }
+</div> 

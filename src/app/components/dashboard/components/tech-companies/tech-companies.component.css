@@ -1,0 +1,201 @@
+/* ===== BACKDROP ===== */
+.modal-backdrop-custom {
+  position: fixed;
+  inset: 0;
+  background: rgba(0, 0, 0, 0.55);
+  backdrop-filter: blur(4px);
+  z-index: 1050;
+}
+
+/* ===== THEME COLORS ===== */
+:root {
+  --modal-bg-light: linear-gradient(145deg, #ffffff, #f7f9fc);
+  --modal-bg-dark: linear-gradient(145deg, #1f1f1f, #2a2a2a);
+  --modal-text-light: #1e1e1e;
+  --modal-text-dark: #f2f2f2;
+  --modal-border-light: #e0e0e0;
+  --modal-border-dark: #333;
+  --accent-color: #4e8cff;
+}
+
+
+
+/* ===== MODAL CONTENT ===== */
+.modal-content {
+  background: var(--bg-color);
+  color: var(--text-primary);
+  border-radius: 18px;
+  border: 1px solid var(--table-border-color);
+  box-shadow: 0 12px 30px rgba(0, 0, 0, 0.15);
+  overflow: hidden;
+  animation: modalFadeIn 0.35s ease-out;
+  max-width: 720px;
+  margin: auto;
+  position: relative;
+}
+
+/* ===== HEADER ===== */
+.modal-header {
+  padding: 1.25rem 1.5rem;
+  border-bottom: 1px solid var(--table-border-color);
+  background: transparent;
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+}
+
+.modal-header h4 {
+  margin: 0;
+  font-size: 1.35rem;
+  font-weight: 600;
+  color: var(--text-primary);
+}
+
+/* ===== CLOSE BUTTON ===== */
+.btn-close {
+  background: none;
+  border: none;
+  font-size: 1.4rem;
+  color: var(--text-primary);
+  cursor: pointer;
+  transition: transform 0.2s ease, color 0.2s ease;
+}
+.btn-close:hover {
+  color: var(--accent-color);
+  transform: rotate(90deg);
+}
+
+/* ===== DETAILS GRID ===== */
+.details-grid {
+  display: grid;
+  grid-template-columns: repeat(auto-fit, minmax(240px, 1fr));
+  gap: 1rem;
+  padding: 1.25rem;
+}
+
+.details-item {
+  background: rgba(255, 255, 255, 0.06);
+  padding: 0.9rem 1rem;
+  border-radius: 10px;
+  border: 1px solid var(--table-border-color);
+  transition: transform 0.2s ease;
+}
+[data-theme="dark"] .details-item {
+  background: rgba(255, 255, 255, 0.03);
+}
+.details-item:hover {
+  transform: translateY(-2px);
+}
+
+.details-item label {
+  display: block;
+  font-weight: 600;
+  color: var(--accent-color);
+  margin-bottom: 0.25rem;
+  font-size: 0.85rem;
+}
+
+.details-item span {
+  font-size: 0.95rem;
+  color: var(--text-primary);
+}
+
+/* ===== STATUS BADGES ===== */
+.details-badge {
+  padding: 4px 10px;
+  border-radius: 12px;
+  font-size: 0.8rem;
+  font-weight: 600;
+  color: #fff;
+  display: inline-block;
+}
+.details-badge.active {
+  background-color: #4caf50;
+}
+.details-badge.inactive {
+  background-color: #f44336;
+}
+
+/* ===== FOOTER ===== */
+.modal-footer {
+  border-top: 1px solid var(--table-border-color);
+  background: transparent;
+  padding: 0.75rem 1.5rem;
+  display: flex;
+  justify-content: flex-end;
+  gap: 0.5rem;
+}
+
+.btn-modern {
+  background-color: var(--accent-color);
+  color: #fff;
+  border: none;
+  background-color: #4f84e0;
+  padding: 0.5rem 1rem;
+  border-radius: 6px;
+  font-weight: 500;
+  transition: background 0.2s ease;
+}
+.btn-modern:hover {
+  background-color: #3a74d9;
+}
+
+/* ===== ANIMATIONS ===== */
+@keyframes modalFadeIn {
+  from {
+    opacity: 0;
+    transform: translateY(-15px);
+  }
+  to {
+    opacity: 1;
+    transform: translateY(0);
+  }
+}
+
+/* ===== RESPONSIVE ===== */
+@media (max-width: 576px) {
+  .details-grid {
+    grid-template-columns: 1fr;
+  }
+  .modal-content {
+    margin: 0 0.5rem;
+  }
+}
+
+.btn-close {
+  background-color: rgba(0, 0, 0, 0.05); /* Light mode background */
+  border: 1px solid var(--table-border-color);
+  border-radius: 50%;
+  width: 32px;
+  height: 32px;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  font-size: 1.2rem;
+  color: var(--text-primary);
+  cursor: pointer;
+  transition: all 0.25s ease;
+  position: relative;
+  padding: 0;
+}
+
+[data-theme="dark"] .btn-close {
+  background-color: rgba(255, 255, 255, 0.08); /* Dark mode background */
+  border: 1px solid var(--modal-border-dark);
+}
+
+.btn-close::before {
+  content: "×";
+  font-size: 1.2rem;
+  font-weight: bold;
+  line-height: 1;
+  color:#4f84e0
+}
+
+.btn-close:hover {
+  background-color: var(--accent-color);
+  color: #fff;
+  border-color: var(--accent-color);
+  transform: rotate(90deg) scale(1.05);
+  box-shadow: 0 4px 8px rgba(78, 140, 255, 0.4);
+}

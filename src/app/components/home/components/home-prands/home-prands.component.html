@@ -1,0 +1,27 @@
+<div class="brand-slider-container py-5">
+  <h2 class="section-title text-center mb-4 py=5">Top PC Hardware Brands</h2>
+
+  <div class="brand-slider" (mouseenter)="paused = true" (mouseleave)="paused = false">
+    <div class="brand-track" [class.paused]="paused">
+      @for (brand of brands.concat(brands); track $index) {
+        <div class="brand-card">
+          <div class="card glass-card text-center">
+            <div class="card-body p-4 d-flex align-items-center justify-content-center">
+              <img
+                [src]="brand.imageUrl"
+                [alt]="brand.name"
+                class="img-fluid brand-logo"
+              />
+            </div>
+              <!--
+            <div class="card-footer bg-transparent border-0 text-glow">
+              <h6 class="mb-0">{{ brand.name }}</h6>
+            </div>
+            -->
+
+          </div>
+        </div>
+      }
+    </div>
+  </div>
+</div>

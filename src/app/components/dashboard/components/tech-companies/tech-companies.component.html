@@ -1,0 +1,156 @@
+<!-- Tech Companies Grid -->
+<div class="container py-4">
+  <div class="row">
+    <div class="col-md-6 col-lg-4 mb-4" *ngFor="let company of techCompanies">
+      <div class="card customer-card shadow-sm h-100">
+        <div class="card-body">
+          <h5 class="card-title fw-bold">{{ company.userName }}</h5>
+          <p class="mb-2">
+            <i class="bi bi-geo-alt me-1"></i> {{ company.city }}, {{ company.country }}
+          </p>
+
+          <div class="d-flex gap-2">
+            <button
+              class="btn btn-outline-primary btn-sm"
+              (click)="showDetails(company)"
+            >
+              <i class="bi bi-eye"></i> View
+            </button>
+            <button
+              class="btn btn-outline-warning btn-sm"
+              (click)="startEdit(company)"
+            >
+              <i class="bi bi-pencil"></i> Edit
+            </button>
+          </div>
+        </div>
+      </div>
+    </div>
+  </div>
+</div>
+
+<!-- Edit Form -->
+<div class="container mt-4" *ngIf="editingCompany">
+  <div class="card shadow-sm">
+    <div class="card-body">
+      <h4 class="mb-3"><i class="bi bi-pencil-square me-2"></i>Edit Tech Company</h4>
+      <form (ngSubmit)="submitEdit()">
+        <div class="row g-3">
+          <div class="col-md-6">
+            <div class="input-group">
+              <span class="input-group-text"><i class="bi bi-person-circle"></i></span>
+              <input class="form-control" placeholder="Username" [(ngModel)]="editData.userName" name="userName" required />
+            </div>
+          </div>
+          <div class="col-md-6">
+            <div class="input-group">
+              <span class="input-group-text"><i class="bi bi-envelope"></i></span>
+              <input class="form-control" placeholder="Email" [(ngModel)]="editData.email" name="email" />
+            </div>
+          </div>
+          <div class="col-md-6">
+            <div class="input-group">
+              <span class="input-group-text"><i class="bi bi-geo-alt"></i></span>
+              <input class="form-control" placeholder="City" [(ngModel)]="editData.city" name="city" />
+            </div>
+          </div>
+          <div class="col-md-6">
+            <div class="input-group">
+              <span class="input-group-text"><i class="bi bi-globe2"></i></span>
+              <input class="form-control" placeholder="Country" [(ngModel)]="editData.country" name="country" />
+            </div>
+          </div>
+          <div class="col-md-6">
+            <div class="input-group">
+              <span class="input-group-text"><i class="bi bi-map"></i></span>
+              <input class="form-control" placeholder="Map Location" [(ngModel)]="editData.mapLocation" name="mapLocation" />
+            </div>
+          </div>
+          <div class="col-md-6">
+            <div class="input-group">
+              <span class="input-group-text"><i class="bi bi-person-badge"></i></span>
+              <input class="form-control" placeholder="Full Name" [(ngModel)]="editData.fullName" name="fullName" />
+            </div>
+          </div>
+          <div class="col-md-6">
+            <div class="input-group">
+              <span class="input-group-text"><i class="bi bi-telephone"></i></span>
+              <input class="form-control" placeholder="Phone Number" [(ngModel)]="editData.phoneNumber" name="phoneNumber" />
+            </div>
+          </div>
+          <div class="col-md-6">
+            <div class="input-group">
+              <span class="input-group-text"><i class="bi bi-house-door"></i></span>
+              <input class="form-control" placeholder="Address" [(ngModel)]="editData.address" name="address" />
+            </div>
+          </div>
+        </div>
+        <div class="mt-3">
+          <button class="btn btn-success me-2" type="submit">
+            <i class="bi bi-check-circle"></i> Save
+          </button>
+          <button class="btn btn-secondary" type="button" (click)="cancelEdit()">
+            <i class="bi bi-x-circle"></i> Cancel
+          </button>
+        </div>
+      </form>
+    </div>
+  </div>
+</div>
+<!-- View Details Modal -->
+<div
+  class="modal fade"
+  id="techCompanyDetailsModal"
+  tabindex="-1"
+  aria-labelledby="techCompanyDetailsModalLabel"
+  aria-hidden="true"
+  #detailsModal
+>
+  <div class="modal-dialog modal-dialog-centered modal-lg">
+    <div class="modal-content custom-modal" *ngIf="selectedCompany">
+      <div class="modal-header">
+        <h4 class="mb-0">{{ selectedCompany.userName }}’s Company Details</h4>
+        <button
+          type="button"
+          class="btn-close styled-close"
+          aria-label="Close"
+          (click)="closeDetails()"
+        ></button>
+      </div>
+      <div class="modal-body details-grid">
+        <div class="details-item">
+          <label><i class="bi bi-person-circle me-1"></i> Username</label>
+          <span>{{ selectedCompany.userName }}</span>
+        </div>
+        <div class="details-item">
+          <label><i class="bi bi-envelope me-1"></i> Email</label>
+          <span>{{ selectedCompany.email }}</span>
+        </div>
+        <div class="details-item">
+          <label><i class="bi bi-geo-alt me-1"></i> City</label>
+          <span>{{ selectedCompany.city }}</span>
+        </div>
+        <div class="details-item">
+          <label><i class="bi bi-globe2 me-1"></i> Country</label>
+          <span>{{ selectedCompany.country }}</span>
+        </div>
+        <div class="details-item">
+          <label><i class="bi bi-map me-1"></i> Map Location</label>
+          <span>{{ selectedCompany.mapLocation || 'N/A' }}</span>
+        </div>
+        <div class="details-item">
+          <label><i class="bi bi-person-badge me-1"></i> Full Name</label>
+          <span>{{ selectedCompany.fullName }}</span>
+        </div>
+        <div class="details-item">
+          <label><i class="bi bi-telephone me-1"></i> Phone Number</label>
+          <span>{{ selectedCompany.phoneNumber }}</span>
+        </div>
+        <div class="details-item">
+          <label><i class="bi bi-house-door me-1"></i> Address</label>
+          <span>{{ selectedCompany.address }}</span>
+        </div>
+      </div>
+    </div>
+  </div>
+</div>

@@ -1,0 +1,327 @@
+<div class="tech-dashboard-container">
+  <!-- Loading State -->
+  @if (loading) {
+    <div class="loading-state">
+      <div class="loading-spinner">
+        <div class="spinner"></div>
+      </div>
+      <p class="loading-text">Loading dashboard...</p>
+    </div>
+  }
+
+  <!-- Error State -->
+  @if (error && !loading) {
+    <div class="error-state">
+      <div class="error-card">
+        <i class="bi bi-exclamation-triangle error-icon"></i>
+        <h3 class="error-title">Oops! Something went wrong</h3>
+        <p class="error-message">{{ error }}</p>
+        <button class="retry-btn" (click)="loadDashboardData()">
+          <i class="bi bi-arrow-clockwise me-2"></i>
+          Try Again
+        </button>
+      </div>
+    </div>
+  }
+
+  <!-- Dashboard Content -->
+  @if (techCompanyData && !loading) {
+    <div class="dashboard-layout">
+      <!-- Header -->
+      <div class="dashboard-header">
+        <div class="header-card">
+          <div class="header-content">
+            <div class="welcome-section">
+              <h2 class="welcome-title">Welcome back, {{ techCompanyData.name }}</h2>
+              <p class="welcome-subtitle">{{ techCompanyData.description || 'Tech Company Dashboard' }}</p>
+              <div class="company-meta">
+                <span class="meta-item">
+                  <i class="bi bi-geo-alt me-1"></i>
+                  {{ techCompanyData.location || 'Location not specified' }}
+                </span>
+                <span class="meta-item">
+                  <i class="bi bi-telephone me-1"></i>
+                  {{ techCompanyData.phone || 'Phone not specified' }}
+                </span>
+              </div>
+            </div>
+            <div class="status-section">
+              <span class="status-badge active">
+                <i class="bi bi-check-circle me-1"></i>
+                Active
+              </span>
+              <div class="last-updated">
+                <i class="bi bi-clock me-1"></i>
+                Last updated: {{ currentDate | date:'short' }}
+              </div>
+            </div>
+          </div>
+        </div>
+      </div>
+
+      <!-- Stats Cards -->
+      <div class="stats-overview">
+        <div class="stats-grid">
+          <div class="stat-card">
+            <div class="stat-content">
+              <div class="stat-info">
+                <h3 class="stat-number">{{ stats.totalRequests || 0 }}</h3>
+                <p class="stat-label">Total Requests</p>
+                <div class="stat-change positive">
+                  <i class="bi bi-arrow-up"></i>
+                  <span>+8% this month</span>
+                </div>
+              </div>
+              <div class="stat-icon">
+                <i class="bi bi-tools"></i>
+              </div>
+            </div>
+            <div class="stat-progress">
+              <div class="progress-circle" [style.--progress]="'75%'">
+                <svg viewBox="0 0 36 36">
+                  <path d="M18 2.0845 a 15.9155 15.9155 0 0 1 0 31.831 a 15.9155 15.9155 0 0 1 0 -31.831"/>
+                  <path d="M18 2.0845 a 15.9155 15.9155 0 0 1 0 31.831 a 15.9155 15.9155 0 0 1 0 -31.831"/>
+                </svg>
+                <span class="progress-text">75%</span>
+              </div>
+            </div>
+          </div>
+
+          <div class="stat-card">
+            <div class="stat-content">
+              <div class="stat-info">
+                <h3 class="stat-number">{{ stats.pendingRequests || 0 }}</h3>
+                <p class="stat-label">Pending Requests</p>
+                <div class="stat-change warning">
+                  <i class="bi bi-exclamation-triangle"></i>
+                  <span>Needs attention</span>
+                </div>
+              </div>
+              <div class="stat-icon">
+                <i class="bi bi-clock"></i>
+              </div>
+            </div>
+            <div class="stat-progress">
+              <div class="progress-circle" [style.--progress]="'45%'">
+                <svg viewBox="0 0 36 36">
+                  <path d="M18 2.0845 a 15.9155 15.9155 0 0 1 0 31.831 a 15.9155 15.9155 0 0 1 0 -31.831"/>
+                  <path d="M18 2.0845 a 15.9155 15.9155 0 0 1 0 31.831 a 15.9155 15.9155 0 0 1 0 -31.831"/>
+                </svg>
+                <span class="progress-text">45%</span>
+              </div>
+            </div>
+          </div>
+
+          <div class="stat-card">
+            <div class="stat-content">
+              <div class="stat-info">
+                <h3 class="stat-number">{{ stats.completedRequests || 0 }}</h3>
+                <p class="stat-label">Completed</p>
+                <div class="stat-change positive">
+                  <i class="bi bi-check-circle"></i>
+                  <span>+12% this week</span>
+                </div>
+              </div>
+              <div class="stat-icon">
+                <i class="bi bi-check-circle"></i>
+              </div>
+            </div>
+            <div class="stat-progress">
+              <div class="progress-circle" [style.--progress]="'92%'">
+                <svg viewBox="0 0 36 36">
+                  <path d="M18 2.0845 a 15.9155 15.9155 0 0 1 0 31.831 a 15.9155 15.9155 0 0 1 0 -31.831"/>
+                  <path d="M18 2.0845 a 15.9155 15.9155 0 0 1 0 31.831 a 15.9155 15.9155 0 0 1 0 -31.831"/>
+                </svg>
+                <span class="progress-text">92%</span>
+              </div>
+            </div>
+          </div>
+
+          <div class="stat-card">
+            <div class="stat-content">
+              <div class="stat-info">
+                <h3 class="stat-number">{{ stats.activeProducts || 0 }}</h3>
+                <p class="stat-label">Active Products</p>
+                <div class="stat-change info">
+                  <i class="bi bi-box"></i>
+                  <span>In catalog</span>
+                </div>
+              </div>
+              <div class="stat-icon">
+                <i class="bi bi-box"></i>
+              </div>
+            </div>
+            <div class="stat-progress">
+              <div class="progress-circle" [style.--progress]="'68%'">
+                <svg viewBox="0 0 36 36">
+                  <path d="M18 2.0845 a 15.9155 15.9155 0 0 1 0 31.831 a 15.9155 15.9155 0 0 1 0 -31.831"/>
+                  <path d="M18 2.0845 a 15.9155 15.9155 0 0 1 0 31.831 a 15.9155 15.9155 0 0 1 0 -31.831"/>
+                </svg>
+                <span class="progress-text">68%</span>
+              </div>
+            </div>
+          </div>
+        </div>
+      </div>
+
+      <!-- Content Area -->
+      <div class="content-area">
+        <div class="content-grid">
+          <!-- Maintenance Requests -->
+          <div class="main-content">
+            <div class="content-card">
+              <div class="card-header">
+                <h3 class="card-title">
+                  <i class="bi bi-wrench me-2"></i>
+                  Recent Maintenance Requests
+                </h3>
+                <a routerLink="/tech-company/maintenance" class="view-all-btn">
+                  <i class="bi bi-arrow-right me-1"></i>
+                  View All
+                </a>
+              </div>
+              <div class="card-body">
+                @if (maintenanceRequests.length > 0) {
+                  <div class="requests-table">
+                    <div class="table-header">
+                      <div class="header-cell">Customer</div>
+                      <div class="header-cell">Service Type</div>
+                      <div class="header-cell">Status</div>
+                      <div class="header-cell">Priority</div>
+                      <div class="header-cell">Actions</div>
+                    </div>
+                    <div class="table-body">
+                      @for (request of maintenanceRequests.slice(0, 5); track request.id) {
+                        <div class="table-row">
+                          <div class="table-cell">
+                            <div class="customer-info">
+                              <i class="bi bi-person-circle me-2"></i>
+                              <span>{{ request.customerName || 'N/A' }}</span>
+                            </div>
+                          </div>
+                          <div class="table-cell">
+                            <span class="service-type">{{ request.serviceType }}</span>
+                          </div>
+                          <div class="table-cell">
+                            <span class="status-badge" [ngClass]="getStatusClass(request.status)">
+                              <i class="bi me-1" [ngClass]="getStatusIcon(request.status)"></i>
+                              {{ request.status }}
+                            </span>
+                          </div>
+                          <div class="table-cell">
+                            <span class="priority-badge" [ngClass]="getPriorityClass(request.priority)">
+                              {{ request.priority }}
+                            </span>
+                          </div>
+                          <div class="table-cell">
+                            <div class="action-buttons">
+                              @if (request.status === 'Pending') {
+                                <button class="action-btn success" (click)="acceptMaintenanceRequest(request.id)">
+                                  <i class="bi bi-check me-1"></i>
+                                  Accept
+                                </button>
+                              }
+                              @if (request.status === 'InProgress') {
+                                <button class="action-btn primary" (click)="completeMaintenanceRequest(request.id)">
+                                  <i class="bi bi-check-circle me-1"></i>
+                                  Complete
+                                </button>
+                              }
+                              <button class="action-btn secondary">
+                                <i class="bi bi-eye me-1"></i>
+                                View
+                              </button>
+                            </div>
+                          </div>
+                        </div>
+                      }
+                    </div>
+                  </div>
+                } @else {
+                  <div class="empty-state">
+                    <i class="bi bi-inbox empty-icon"></i>
+                    <h4 class="empty-title">No maintenance requests</h4>
+                    <p class="empty-message">You don't have any maintenance requests at the moment.</p>
+                  </div>
+                }
+              </div>
+            </div>
+          </div>
+
+          <!-- Quick Actions -->
+          <div class="sidebar-content">
+            <div class="content-card">
+              <div class="card-header">
+                <h3 class="card-title">
+                  <i class="bi bi-lightning me-2"></i>
+                  Quick Actions
+                </h3>
+              </div>
+              <div class="card-body">
+                <div class="action-buttons">
+                  <a routerLink="/tech-company/maintenance" class="action-btn primary">
+                    <i class="bi bi-wrench me-2"></i>
+                    View Maintenance Requests
+                  </a>
+                  <a routerLink="/tech-company/products" class="action-btn secondary">
+                    <i class="bi bi-box me-2"></i>
+                    Manage Products
+                  </a>
+                  <a routerLink="/maintenance/create" class="action-btn secondary">
+                    <i class="bi bi-plus-circle me-2"></i>
+                    Create Maintenance Request
+                  </a>
+                  <a routerLink="/profile" class="action-btn secondary">
+                    <i class="bi bi-person me-2"></i>
+                    Update Profile
+                  </a>
+                </div>
+              </div>
+            </div>
+
+            <!-- Recent Activity -->
+            <div class="content-card">
+              <div class="card-header">
+                <h3 class="card-title">
+                  <i class="bi bi-activity me-2"></i>
+                  Recent Activity
+                </h3>
+              </div>
+              <div class="card-body">
+                <div class="activity-list">
+                  <div class="activity-item">
+                    <div class="activity-icon success">
+                      <i class="bi bi-check-circle"></i>
+                    </div>
+                    <div class="activity-content">
+                      <p class="activity-text">Completed maintenance request #1234</p>
+                      <span class="activity-time">2 hours ago</span>
+                    </div>
+                  </div>
+                  <div class="activity-item">
+                    <div class="activity-icon warning">
+                      <i class="bi bi-clock"></i>
+                    </div>
+                    <div class="activity-content">
+                      <p class="activity-text">New maintenance request received</p>
+                      <span class="activity-time">4 hours ago</span>
+                    </div>
+                  </div>
+                  <div class="activity-item">
+                    <div class="activity-icon info">
+                      <i class="bi bi-box"></i>
+                    </div>
+                    <div class="activity-content">
+                      <p class="activity-text">Product catalog updated</p>
+                      <span class="activity-time">1 day ago</span>
+                    </div>
+                  </div>
+                </div>
+              </div>
+            </div>
+          </div>
+        </div>
+      </div>
+    </div>
+  }
+</div> 

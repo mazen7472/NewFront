@@ -1,0 +1,272 @@
+@import url('https://fonts.googleapis.com/css2?family=Orbitron:wght@700;900&display=swap');
+
+.banner-container {
+  height: auto;
+  width: 100%;
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  background: transparent;
+  padding: 20px;
+  box-sizing: border-box;
+}
+
+.banner {
+  position: relative;
+  width: 100%;
+  max-width: 1000px;
+  aspect-ratio: 4 / 1;
+  font-family: 'Orbitron', sans-serif;
+  color: var(--text-primary);
+  overflow: hidden;
+  border-radius: 12px;
+  background: linear-gradient(135deg, var(--card-bg), var(--bg-color));
+  box-shadow:
+    0 0 30px var(--accent-red),
+    0 0 40px var(--accent-blue);
+  border: 2px solid var(--border-color);
+  display: flex;
+  align-items: center;
+  padding-left: 5%;
+  box-sizing: border-box;
+}
+
+.background-pattern {
+  position: absolute;
+  inset: 0;
+  z-index: 1;
+  pointer-events: none;
+}
+
+.background-pattern .grid-overlay {
+  position: absolute;
+  inset: 0;
+  background:
+    linear-gradient(to right, rgba(255, 255, 255, 0.05) 1px, transparent 1px),
+    linear-gradient(to bottom, rgba(255, 255, 255, 0.05) 1px, transparent 1px);
+  background-size: 40px 40px;
+  mix-blend-mode: overlay;
+}
+
+.background-pattern svg.circuits {
+  position: absolute;
+  width: 100%;
+  height: 100%;
+  stroke: rgba(255, 255, 255, 0.15);
+  stroke-width: 2;
+  fill: none;
+  animation: pulseCircuit 6s infinite alternate ease-in-out;
+}
+
+@keyframes pulseCircuit {
+  0% {
+    stroke-opacity: 0.1;
+  }
+  100% {
+    stroke-opacity: 0.3;
+  }
+}
+
+.content {
+  position: relative;
+  z-index: 2;
+  max-width: 60%;
+  user-select: none;
+}
+
+.shop-name {
+  font-size: clamp(2rem, 5vw, 3.5rem);
+  font-weight: 900;
+  letter-spacing: 0.2em;
+  margin: 0;
+  position: relative;
+  color: var(--text-primary);
+  text-shadow:
+    0 0 5px var(--text-primary),
+    0 0 10px var(--accent-red),
+    0 0 20px var(--accent-red),
+    0 0 30px var(--accent-red),
+    0 0 40px var(--accent-blue),
+    0 0 70px var(--accent-blue);
+}
+
+.shop-name.red {
+  color: var(--accent-red);
+  text-shadow: 0 0 10px var(--accent-red);
+}
+
+.shop-name.blue {
+  color: var(--accent-blue);
+  text-shadow: 0 0 10px var(--accent-blue);
+}
+
+.shop-name.glitch::before,
+.shop-name.glitch::after {
+  content: attr(data-text);
+  position: absolute;
+  top: 0;
+  left: 0;
+  width: 100%;
+  height: 100%;
+  opacity: 0.8;
+  clip-path: polygon(0 0, 100% 0, 100% 45%, 0 45%);
+}
+
+.shop-name.glitch::before {
+  left: 2px;
+  text-shadow: -2px 0 var(--accent-red);
+  animation: glitchTop 2s infinite linear alternate-reverse;
+}
+
+.shop-name.glitch::after {
+  left: -2px;
+  text-shadow: 2px 0 var(--accent-blue);
+  animation: glitchBottom 2s infinite linear alternate;
+  clip-path: polygon(0 55%, 100% 55%, 100% 100%, 0 100%);
+}
+
+.tagline {
+  margin-top: 0.4em;
+  font-size: clamp(1rem, 2vw, 1.4rem);
+  font-weight: 600;
+  color: var(--text-secondary);
+  text-shadow: 0 0 10px rgba(0, 0, 0, 0.7);
+}
+
+.icons {
+  position: absolute;
+  right: 5%;
+  bottom: 15%;
+  display: flex;
+  gap: 2.5vw;
+  z-index: 2;
+  transform: none;
+}
+
+.icons svg {
+  width: clamp(30px, 5vw, 60px);
+  height: auto;
+  fill: none;
+  stroke-width: 3;
+  stroke-linejoin: round;
+  stroke-linecap: round;
+  filter: drop-shadow(0 0 6px var(--shadow-color));
+  animation: pulseGlow 3s infinite alternate ease-in-out;
+  cursor: default;
+  transition: transform 0.3s ease;
+}
+
+.icons svg:hover {
+  transform: scale(1.15);
+  filter: drop-shadow(0 0 12px var(--accent-red));
+}
+
+.icons svg.pc {
+  stroke: var(--accent-red);
+  filter: drop-shadow(0 0 10px var(--accent-red));
+}
+
+.icons svg.tool {
+  stroke: var(--accent-blue);
+  filter: drop-shadow(0 0 10px var(--accent-blue));
+}
+
+@keyframes pulseGlow {
+  0% {
+    filter: drop-shadow(0 0 6px var(--shadow-color));
+  }
+  100% {
+    filter: drop-shadow(0 0 12px var(--accent-blue));
+  }
+}
+
+@keyframes glitchTop {
+  0% {
+    clip-path: polygon(0 0, 100% 0, 100% 45%, 0 45%);
+    transform: translate(0);
+  }
+  20% {
+    clip-path: polygon(0 0, 100% 0, 100% 40%, 0 40%);
+    transform: translate(-2px, -2px);
+  }
+  40% {
+    clip-path: polygon(0 0, 100% 0, 100% 50%, 0 50%);
+    transform: translate(2px, 2px);
+  }
+  60% {
+    clip-path: polygon(0 0, 100% 0, 100% 45%, 0 45%);
+    transform: translate(-1px, 1px);
+  }
+  80% {
+    clip-path: polygon(0 0, 100% 0, 100% 43%, 0 43%);
+    transform: translate(1px, -1px);
+  }
+  100% {
+    clip-path: polygon(0 0, 100% 0, 100% 45%, 0 45%);
+    transform: translate(0);
+  }
+}
+
+@keyframes glitchBottom {
+  0% {
+    clip-path: polygon(0 55%, 100% 55%, 100% 100%, 0 100%);
+    transform: translate(0);
+  }
+  20% {
+    clip-path: polygon(0 50%, 100% 50%, 100% 100%, 0 100%);
+    transform: translate(2px, 2px);
+  }
+  40% {
+    clip-path: polygon(0 60%, 100% 60%, 100% 100%, 0 100%);
+    transform: translate(-2px, -2px);
+  }
+  60% {
+    clip-path: polygon(0 55%, 100% 55%, 100% 100%, 0 100%);
+    transform: translate(1px, -1px);
+  }
+  80% {
+    clip-path: polygon(0 57%, 100% 57%, 100% 100%, 0 100%);
+    transform: translate(-1px, 1px);
+  }
+  100% {
+    clip-path: polygon(0 55%, 100% 55%, 100% 100%, 0 100%);
+    transform: translate(0);
+  }
+}
+
+/* Responsive tweaks */
+
+@media (max-width: 700px) {
+  .content {
+    max-width: 65%;
+  }
+
+  .icons {
+    right: 3%;
+    gap: 15px;
+  }
+}
+
+@media (max-width: 480px) {
+  .banner-container {
+    padding: 10px;
+  }
+
+  .content {
+    max-width: 70%;
+  }
+
+  .shop-name {
+    font-size: clamp(1.5rem, 6vw, 2.5rem);
+    letter-spacing: 0.15em;
+  }
+
+  .tagline {
+    font-size: clamp(0.9rem, 3vw, 1.1rem);
+  }
+
+  .icons svg {
+    width: 40px;
+  }
+}
+

@@ -1,0 +1,37 @@
+<div class="pending-products">
+  <h2 class="section-title">Pending Products</h2>
+  <p class="section-subtitle">
+    Review and manage products awaiting admin approval.
+  </p>
+
+  @if (loading()) {
+    <div class="loading">🔄 Loading pending products...</div>
+  }
+
+  @if (error()) {
+    <div class="error">{{ error() }}</div>
+  }
+
+  @if (!loading() && products().length === 0) {
+    <div class="empty-state">
+      🎉 No pending products. Everything is approved!
+    </div>
+  }
+
+  @for (product of products(); track product.id) {
+    <div class="product-card">
+      <h3>{{ product.name }}</h3>
+      <p class="description">{{ product.description }}</p>
+      <p><strong>Price:</strong> ${{ product.price }}</p>
+
+      <div class="actions">
+        <button class="approve-btn" (click)="approveProduct(product.id)">
+          ✅ Approve
+        </button>
+        <button class="reject-btn" (click)="rejectProduct(product.id)">
+          ❌ Reject
+        </button>
+      </div>
+    </div>
+  }
+</div>

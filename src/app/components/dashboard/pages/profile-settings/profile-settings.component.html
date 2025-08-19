@@ -1,0 +1,449 @@
+
+<div class="profile-settings-container">
+  <!-- Header -->
+  <div class="header-section">
+    <div class="header-content">
+      <h1 class="page-title">
+        <i class="bi bi-person-gear me-2"></i>
+        Profile Settings
+      </h1>
+      <p class="page-subtitle">Manage your account information and preferences</p>
+    </div>
+  </div>
+
+  <!-- Loading State -->
+  <div *ngIf="loading" class="loading-container">
+    <div class="spinner-border text-primary" role="status">
+      <span class="visually-hidden">Loading...</span>
+    </div>
+    <p class="mt-3 text-muted">Loading profile information...</p>
+  </div>
+
+  <!-- Error State -->
+  <div *ngIf="error" class="error-container">
+    <div class="alert alert-danger" role="alert">
+      <i class="bi bi-exclamation-triangle me-2"></i>
+      {{ error }}
+    </div>
+  </div>
+
+  <!-- Success State -->
+  <div *ngIf="success" class="success-container">
+    <div class="alert alert-success" role="alert">
+      <i class="bi bi-check-circle me-2"></i>
+      {{ success }}
+    </div>
+  </div>
+
+  <!-- Profile Content -->
+  <div *ngIf="!loading && profile" class="profile-content">
+    <div class="row g-4">
+      <!-- Profile Information -->
+      <div class="col-lg-8">
+        <div class="settings-card">
+          <div class="card-header">
+            <h5 class="card-title">
+              <i class="bi bi-person me-2"></i>
+              Profile Information
+            </h5>
+          </div>
+          <div class="card-body">
+            <form [formGroup]="profileForm" (ngSubmit)="updateProfile()">
+              <div class="row g-3">
+                <div class="col-md-6">
+                  <label for="firstName" class="form-label">First Name *</label>
+                  <input 
+                    type="text" 
+                    class="form-control form-control-modern" 
+                    id="firstName"
+                    formControlName="firstName"
+                    [class.is-invalid]="profileForm.get('firstName')?.invalid && profileForm.get('firstName')?.touched">
+                  <div class="invalid-feedback" *ngIf="getFieldError(profileForm, 'firstName')">
+                    {{ getFieldError(profileForm, 'firstName') }}
+                  </div>
+                </div>
+                
+                <div class="col-md-6">
+                  <label for="lastName" class="form-label">Last Name *</label>
+                  <input 
+                    type="text" 
+                    class="form-control form-control-modern" 
+                    id="lastName"
+                    formControlName="lastName"
+                    [class.is-invalid]="profileForm.get('lastName')?.invalid && profileForm.get('lastName')?.touched">
+                  <div class="invalid-feedback" *ngIf="getFieldError(profileForm, 'lastName')">
+                    {{ getFieldError(profileForm, 'lastName') }}
+                  </div>
+                </div>
+                
+                <div class="col-md-6">
+                  <label for="email" class="form-label">Email Address *</label>
+                  <input 
+                    type="email" 
+                    class="form-control form-control-modern" 
+                    id="email"
+                    formControlName="email"
+                    [class.is-invalid]="profileForm.get('email')?.invalid && profileForm.get('email')?.touched">
+                  <div class="invalid-feedback" *ngIf="getFieldError(profileForm, 'email')">
+                    {{ getFieldError(profileForm, 'email') }}
+                  </div>
+                </div>
+                
+                <div class="col-md-6">
+                  <label for="phoneNumber" class="form-label">Phone Number *</label>
+                  <input 
+                    type="tel" 
+                    class="form-control form-control-modern" 
+                    id="phoneNumber"
+                    formControlName="phoneNumber"
+                    [class.is-invalid]="profileForm.get('phoneNumber')?.invalid && profileForm.get('phoneNumber')?.touched">
+                  <div class="invalid-feedback" *ngIf="getFieldError(profileForm, 'phoneNumber')">
+                    {{ getFieldError(profileForm, 'phoneNumber') }}
+                  </div>
+                </div>
+              </div>
+              
+              <div class="form-actions">
+                <button 
+                  type="submit" 
+                  class="btn modern-btn" 
+                  [disabled]="profileForm.invalid || saving">
+                  <i class="bi bi-check-circle me-2"></i>
+                  {{ saving ? 'Updating...' : 'Update Profile' }}
+                </button>
+              </div>
+            </form>
+          </div>
+        </div>
+
+        <!-- Change Password -->
+        <div class="settings-card">
+          <div class="card-header">
+            <h5 class="card-title">
+              <i class="bi bi-shield-lock me-2"></i>
+              Change Password
+            </h5>
+          </div>
+          <div class="card-body">
+            <form [formGroup]="passwordForm" (ngSubmit)="changePassword()">
+              <div class="row g-3">
+                <div class="col-md-12">
+                  <label for="currentPassword" class="form-label">Current Password *</label>
+                  <div class="input-group">
+                    <input 
+                      [type]="showCurrentPassword ? 'text' : 'password'" 
+                      class="form-control form-control-modern" 
+                      id="currentPassword"
+                      formControlName="currentPassword"
+                      [class.is-invalid]="passwordForm.get('currentPassword')?.invalid && passwordForm.get('currentPassword')?.touched">
+                    <button 
+                      type="button" 
+                      class="btn btn-outline-secondary" 
+                      (click)="togglePasswordVisibility('current')">
+                      <i class="bi" [ngClass]="showCurrentPassword ? 'bi-eye-slash' : 'bi-eye'"></i>
+                    </button>
+                  </div>
+                  <div class="invalid-feedback" *ngIf="getFieldError(passwordForm, 'currentPassword')">
+                    {{ getFieldError(passwordForm, 'currentPassword') }}
+                  </div>
+                </div>
+                
+                <div class="col-md-6">
+                  <label for="newPassword" class="form-label">New Password *</label>
+                  <div class="input-group">
+                    <input 
+                      [type]="showNewPassword ? 'text' : 'password'" 
+                      class="form-control form-control-modern" 
+                      id="newPassword"
+                      formControlName="newPassword"
+                      [class.is-invalid]="passwordForm.get('newPassword')?.invalid && passwordForm.get('newPassword')?.touched">
+                    <button 
+                      type="button" 
+                      class="btn btn-outline-secondary" 
+                      (click)="togglePasswordVisibility('new')">
+                      <i class="bi" [ngClass]="showNewPassword ? 'bi-eye-slash' : 'bi-eye'"></i>
+                    </button>
+                  </div>
+                  <div class="invalid-feedback" *ngIf="getFieldError(passwordForm, 'newPassword')">
+                    {{ getFieldError(passwordForm, 'newPassword') }}
+                  </div>
+                  <small class="form-text text-muted">
+                    Password must be at least 8 characters with uppercase, lowercase, number, and special character
+                  </small>
+                </div>
+                
+                <div class="col-md-6">
+                  <label for="confirmPassword" class="form-label">Confirm Password *</label>
+                  <div class="input-group">
+                    <input 
+                      [type]="showConfirmPassword ? 'text' : 'password'" 
+                      class="form-control form-control-modern" 
+                      id="confirmPassword"
+                      formControlName="confirmPassword"
+                      [class.is-invalid]="passwordForm.get('confirmPassword')?.invalid && passwordForm.get('confirmPassword')?.touched">
+                    <button 
+                      type="button" 
+                      class="btn btn-outline-secondary" 
+                      (click)="togglePasswordVisibility('confirm')">
+                      <i class="bi" [ngClass]="showConfirmPassword ? 'bi-eye-slash' : 'bi-eye'"></i>
+                    </button>
+                  </div>
+                  <div class="invalid-feedback" *ngIf="getPasswordError()">
+                    {{ getPasswordError() }}
+                  </div>
+                </div>
+              </div>
+              
+              <div class="form-actions">
+                <button 
+                  type="submit" 
+                  class="btn modern-btn" 
+                  [disabled]="passwordForm.invalid || saving">
+                  <i class="bi bi-shield-check me-2"></i>
+                  {{ saving ? 'Changing...' : 'Change Password' }}
+                </button>
+              </div>
+            </form>
+          </div>
+        </div>
+
+        <!-- Notification Settings -->
+        <div class="settings-card">
+          <div class="card-header">
+            <h5 class="card-title">
+              <i class="bi bi-bell me-2"></i>
+              Notification Settings
+            </h5>
+          </div>
+          <div class="card-body">
+            <form [formGroup]="notificationForm" (ngSubmit)="updateNotificationSettings()">
+              <div class="row g-3">
+                <div class="col-md-6">
+                  <div class="form-check form-switch">
+                    <input 
+                      class="form-check-input" 
+                      type="checkbox" 
+                      id="emailNotifications"
+                      formControlName="emailNotifications">
+                    <label class="form-check-label" for="emailNotifications">
+                      Email Notifications
+                    </label>
+                  </div>
+                </div>
+                
+                <div class="col-md-6">
+                  <div class="form-check form-switch">
+                    <input 
+                      class="form-check-input" 
+                      type="checkbox" 
+                      id="smsNotifications"
+                      formControlName="smsNotifications">
+                    <label class="form-check-label" for="smsNotifications">
+                      SMS Notifications
+                    </label>
+                  </div>
+                </div>
+                
+                <div class="col-md-6">
+                  <div class="form-check form-switch">
+                    <input 
+                      class="form-check-input" 
+                      type="checkbox" 
+                      id="pushNotifications"
+                      formControlName="pushNotifications">
+                    <label class="form-check-label" for="pushNotifications">
+                      Push Notifications
+                    </label>
+                  </div>
+                </div>
+                
+                <div class="col-md-6">
+                  <div class="form-check form-switch">
+                    <input 
+                      class="form-check-input" 
+                      type="checkbox" 
+                      id="orderUpdates"
+                      formControlName="orderUpdates">
+                    <label class="form-check-label" for="orderUpdates">
+                      Order Updates
+                    </label>
+                  </div>
+                </div>
+                
+                <div class="col-md-6">
+                  <div class="form-check form-switch">
+                    <input 
+                      class="form-check-input" 
+                      type="checkbox" 
+                      id="maintenanceUpdates"
+                      formControlName="maintenanceUpdates">
+                    <label class="form-check-label" for="maintenanceUpdates">
+                      Maintenance Updates
+                    </label>
+                  </div>
+                </div>
+                
+                <div class="col-md-6">
+                  <div class="form-check form-switch">
+                    <input 
+                      class="form-check-input" 
+                      type="checkbox" 
+                      id="deliveryUpdates"
+                      formControlName="deliveryUpdates">
+                    <label class="form-check-label" for="deliveryUpdates">
+                      Delivery Updates
+                    </label>
+                  </div>
+                </div>
+                
+                <div class="col-md-6">
+                  <div class="form-check form-switch">
+                    <input 
+                      class="form-check-input" 
+                      type="checkbox" 
+                      id="systemAlerts"
+                      formControlName="systemAlerts">
+                    <label class="form-check-label" for="systemAlerts">
+                      System Alerts
+                    </label>
+                  </div>
+                </div>
+                
+                <div class="col-md-6">
+                  <div class="form-check form-switch">
+                    <input 
+                      class="form-check-input" 
+                      type="checkbox" 
+                      id="marketingEmails"
+                      formControlName="marketingEmails">
+                    <label class="form-check-label" for="marketingEmails">
+                      Marketing Emails
+                    </label>
+                  </div>
+                </div>
+              </div>
+              
+              <div class="form-actions">
+                <button 
+                  type="submit" 
+                  class="btn modern-btn" 
+                  [disabled]="saving">
+                  <i class="bi bi-check-circle me-2"></i>
+                  {{ saving ? 'Updating...' : 'Update Notifications' }}
+                </button>
+              </div>
+            </form>
+          </div>
+        </div>
+      </div>
+
+      <!-- Profile Sidebar -->
+      <div class="col-lg-4">
+        <!-- Profile Image -->
+        <div class="settings-card">
+          <div class="card-header">
+            <h5 class="card-title">
+              <i class="bi bi-camera me-2"></i>
+              Profile Image
+            </h5>
+          </div>
+          <div class="card-body text-center">
+            <div class="profile-image-container">
+              <img 
+                [src]="imagePreview || profile.profileImageUrl || 'assets/Images/placeholder.png'" 
+                [alt]="profile.firstName + ' ' + profile.lastName"
+                class="profile-image"
+                (error)="onImageError($event)">
+              
+              <div class="image-upload-overlay" *ngIf="!imagePreview">
+                <label for="profileImage" class="upload-label">
+                  <i class="bi bi-camera"></i>
+                  <span>Change Photo</span>
+                </label>
+                <input 
+                  type="file" 
+                  id="profileImage" 
+                  accept="image/*" 
+                  (change)="onFileSelected($event)"
+                  style="display: none;">
+              </div>
+            </div>
+            
+            <div *ngIf="selectedFile" class="mt-3">
+              <p class="text-muted small">{{ selectedFile.name }}</p>
+              <button 
+                type="button" 
+                class="btn btn-sm modern-btn" 
+                (click)="uploadProfileImage()"
+                [disabled]="saving">
+                <i class="bi bi-upload me-2"></i>
+                {{ saving ? 'Uploading...' : 'Upload Image' }}
+              </button>
+            </div>
+          </div>
+        </div>
+
+        <!-- Account Information -->
+        <div class="settings-card">
+          <div class="card-header">
+            <h5 class="card-title">
+              <i class="bi bi-info-circle me-2"></i>
+              Account Information
+            </h5>
+          </div>
+          <div class="card-body">
+            <div class="info-item">
+              <label class="info-label">User ID</label>
+              <p class="info-value">{{ profile.id }}</p>
+            </div>
+            
+            <div class="info-item">
+              <label class="info-label">Role</label>
+              <p class="info-value">
+                <span class="badge bg-primary">{{ profile.role }}</span>
+              </p>
+            </div>
+            
+            <div class="info-item">
+              <label class="info-label">Status</label>
+              <p class="info-value">
+                <span class="badge" [ngClass]="profile.isActive ? 'bg-success' : 'bg-danger'">
+                  {{ profile.isActive ? 'Active' : 'Inactive' }}
+                </span>
+              </p>
+            </div>
+            
+            <div class="info-item">
+              <label class="info-label">Member Since</label>
+              <p class="info-value">{{ formatDate(profile.createdAt) }}</p>
+            </div>
+            
+            <div class="info-item" *ngIf="profile.lastLoginDate">
+              <label class="info-label">Last Login</label>
+              <p class="info-value">{{ formatDate(profile.lastLoginDate) }}</p>
+            </div>
+          </div>
+        </div>
+
+        <!-- Security Tips -->
+        <div class="settings-card">
+          <div class="card-header">
+            <h5 class="card-title">
+              <i class="bi bi-shield-check me-2"></i>
+              Security Tips
+            </h5>
+          </div>
+          <div class="card-body">
+            <ul class="security-tips">
+              <li>Use a strong, unique password</li>
+              <li>Enable two-factor authentication</li>
+              <li>Keep your email address updated</li>
+              <li>Review login activity regularly</li>
+              <li>Never share your credentials</li>
+            </ul>
+          </div>
+        </div>
+      </div>
+    </div>
+  </div>
+</div> 

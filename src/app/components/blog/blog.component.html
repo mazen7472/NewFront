@@ -1,0 +1,76 @@
+<div class="container">
+  <!-- Headline -->
+  <section class="text-center my-5">
+    <h1 class="section-title">TechPerts Hardware Insights</h1>
+    <p class="section-subtitle">
+      Explore the latest reviews, comparisons, and PC hardware benchmarks.
+    </p>
+    <button class="btn explore-btn" (click)="scrollToSection('articles')">
+      Explore Articles
+    </button>
+  </section>
+
+  <!-- Search Bar -->
+  <div class="row mb-4 justify-content-center">
+    <div class="col-md-6">
+      <input [(ngModel)]="searchQuery" class="form-control" placeholder="Search articles..." />
+    </div>
+  </div>
+
+  <!-- Featured Articles -->
+  <section id="articles">
+    <h2 class="section-title">Featured Articles</h2>
+    <div class="row">
+      <ng-container *ngIf="filteredArticles.length > 0; else noArticles">
+        <div class="col-md-4 mb-4" *ngFor="let article of filteredArticles; trackBy: trackByTitle">
+          <div class="card h-100 article-card">
+            <img [src]="article.img" class="card-img-top img-fluid" [alt]="article.title" />
+            <div class="card-body">
+              <p class="text-primary">{{ article.date }}</p>
+              <h5 class="card-title">{{ article.title }}</h5>
+              <p class="card-text">{{ article.description }}</p>
+              <a [routerLink]="['/blog', article.slug]" class="btn btn-sm read-more-btn">
+                Read More
+              </a>
+            </div>
+          </div>
+        </div>
+      </ng-container>
+      <ng-template #noArticles>
+        <p class="text-primary">No articles found for that search.</p>
+      </ng-template>
+    </div>
+  </section>
+
+  <!-- Categories -->
+<div class="categories-section">
+  <h2 class="section-title">Our Categories</h2>
+  <div class="categories-container">
+    @for (category of categories; track category) {
+      <div class="category-card clickable">
+        <div class="icon-wrapper category-icon">
+          <img [src]="category.imageUrl" [alt]="category.label" class="category-img" />
+        </div>
+        <p class="category-label">{{ category.label }}</p>
+      </div>
+    }
+  </div>
+</div>
+
+  <!-- Tags -->
+  <section class="mt-5">
+    <h2 class="section-title">Popular Tags</h2>
+    <div class="d-flex flex-wrap justify-content-center">
+      <span *ngFor="let tag of tags" class="badge tag-badge">#{{ tag }}</span>
+    </div>
+  </section>
+
+  <!-- Subscription -->
+  <section *ngIf="showSubscription" class="text-center mt-5">
+    <h2 class="section-title">Stay Updated</h2>
+    <form class="form-inline justify-content-center mt-3">
+      <input type="email" class="form-control mr-2 mb-3" placeholder="Enter your email" />
+      <button type="submit" class="btn subscribe-btn">Subscribe</button>
+    </form>
+  </section>
+</div>

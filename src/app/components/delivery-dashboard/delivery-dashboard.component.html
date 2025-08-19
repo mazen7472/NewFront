@@ -1,0 +1,264 @@
+<div class="delivery-dashboard-container">
+  <!-- Header -->
+  <div class="row mb-4">
+    <div class="col-12">
+      <div class="d-flex justify-content-between align-items-center">
+        <h2 class="mb-0">Delivery Dashboard</h2>
+        <div class="btn-group">
+          <a routerLink="/delivery/orders" class="btn btn-outline-primary">
+            <i class="bi bi-list me-2"></i>View Orders
+          </a>
+          <a routerLink="/delivery/history" class="btn btn-outline-secondary">
+            <i class="bi bi-clock-history me-2"></i>History
+          </a>
+        </div>
+      </div>
+    </div>
+  </div>
+
+  <!-- Stats Cards -->
+  <div class="row mb-4">
+    <div class="col-md-2 mb-3">
+      <div class="card stat-card">
+        <div class="card-body text-center">
+          <i class="bi bi-truck stat-icon text-primary"></i>
+          <h3 class="stat-number">{{ stats.totalDeliveries }}</h3>
+          <p class="stat-label">Total Deliveries</p>
+        </div>
+      </div>
+    </div>
+    <div class="col-md-2 mb-3">
+      <div class="card stat-card">
+        <div class="card-body text-center">
+          <i class="bi bi-clock stat-icon text-warning"></i>
+          <h3 class="stat-number">{{ stats.pendingDeliveries }}</h3>
+          <p class="stat-label">Pending</p>
+        </div>
+      </div>
+    </div>
+    <div class="col-md-2 mb-3">
+      <div class="card stat-card">
+        <div class="card-body text-center">
+          <i class="bi bi-check-circle stat-icon text-success"></i>
+          <h3 class="stat-number">{{ stats.completedDeliveries }}</h3>
+          <p class="stat-label">Completed</p>
+        </div>
+      </div>
+    </div>
+    <div class="col-md-2 mb-3">
+      <div class="card stat-card">
+        <div class="card-body text-center">
+          <i class="bi bi-box stat-icon text-info"></i>
+          <h3 class="stat-number">{{ stats.totalOrders }}</h3>
+          <p class="stat-label">Available Orders</p>
+        </div>
+      </div>
+    </div>
+    <div class="col-md-2 mb-3">
+      <div class="card stat-card">
+        <div class="card-body text-center">
+          <i class="bi bi-arrow-up-circle stat-icon text-warning"></i>
+          <h3 class="stat-number">{{ stats.pendingOrders }}</h3>
+          <p class="stat-label">Ready for Pickup</p>
+        </div>
+      </div>
+    </div>
+    <div class="col-md-2 mb-3">
+      <div class="card stat-card">
+        <div class="card-body text-center">
+          <i class="bi bi-check-circle-fill stat-icon text-success"></i>
+          <h3 class="stat-number">{{ stats.completedOrders }}</h3>
+          <p class="stat-label">Delivered</p>
+        </div>
+      </div>
+    </div>
+  </div>
+
+  <!-- Loading State -->
+  @if (loading) {
+    <div class="text-center py-5">
+      <div class="spinner-border text-primary" role="status">
+        <span class="visually-hidden">Loading...</span>
+      </div>
+      <p class="mt-2">Loading delivery data...</p>
+    </div>
+  }
+
+  <!-- Error State -->
+  @if (error && !loading) {
+    <div class="alert alert-danger">
+      <i class="bi bi-exclamation-triangle me-2"></i>
+      {{ error }}
+    </div>
+  }
+
+  <!-- Content -->
+  @if (!loading && !error) {
+    <div class="row">
+      <!-- Active Deliveries -->
+      <div class="col-lg-6 mb-4">
+        <div class="card">
+          <div class="card-header">
+            <h5 class="mb-0">
+              <i class="bi bi-truck me-2"></i>Active Deliveries
+            </h5>
+          </div>
+          <div class="card-body">
+            @if (deliveries.length > 0) {
+              <div class="delivery-list">
+                @for (delivery of deliveries; track delivery.id) {
+                  <div class="delivery-item mb-3 p-3 border rounded">
+                    <div class="d-flex justify-content-between align-items-start mb-2">
+                      <div>
+                        <h6 class="mb-1">Delivery #{{ delivery.trackingNumber }}</h6>
+                        <small class="text-muted">Order #{{ delivery.orderId }}</small>
+                      </div>
+                      <span class="badge" [ngClass]="getStatusBadgeClass(delivery.status)">
+                        <i class="bi me-1" [ngClass]="getStatusIcon(delivery.status)"></i>
+                        {{ delivery.status }}
+                      </span>
+                    </div>
+                    
+                    <div class="delivery-details">
+                      <div class="row">
+                        <div class="col-md-6">
+                          <small class="text-muted">
+                            <i class="bi bi-geo-alt me-1"></i>
+                            {{ delivery.deliveryAddress }}
+                          </small>
+                        </div>
+                        <div class="col-md-6">
+                          <small class="text-muted">
+                            <i class="bi bi-telephone me-1"></i>
+                            {{ delivery.customerPhone }}
+                          </small>
+                        </div>
+                      </div>
+                      
+                      <div class="row mt-2">
+                        <div class="col-md-6">
+                          <small class="text-muted">
+                            <i class="bi bi-calendar me-1"></i>
+                            Est: {{ delivery.estimatedDeliveryDate | date:'short' }}
+                          </small>
+                        </div>
+                        @if (delivery.actualDeliveryDate) {
+                          <div class="col-md-6">
+                            <small class="text-muted">
+                              <i class="bi bi-check-circle me-1"></i>
+                              Delivered: {{ delivery.actualDeliveryDate | date:'short' }}
+                            </small>
+                          </div>
+                        }
+                      </div>
+                    </div>
+                    
+                    <div class="delivery-actions mt-3">
+                      @if (delivery.status === 'Pending') {
+                        <button class="btn btn-success btn-sm me-2" (click)="acceptDelivery(delivery.id)">
+                          <i class="bi bi-check me-1"></i>Accept
+                        </button>
+                      }
+                      @if (delivery.status === 'InProgress') {
+                        <button class="btn btn-primary btn-sm me-2" (click)="completeDelivery(delivery.id)">
+                          <i class="bi bi-check-circle me-1"></i>Complete
+                        </button>
+                      }
+                      <button class="btn btn-outline-info btn-sm">
+                        <i class="bi bi-eye me-1"></i>Details
+                      </button>
+                    </div>
+                  </div>
+                }
+              </div>
+            } @else {
+              <div class="text-center py-4">
+                <i class="bi bi-inbox display-4 text-muted"></i>
+                <h6 class="mt-2 text-muted">No Active Deliveries</h6>
+                <p class="text-muted">You don't have any active deliveries at the moment.</p>
+              </div>
+            }
+          </div>
+        </div>
+      </div>
+
+      <!-- Available Orders -->
+      <div class="col-lg-6 mb-4">
+        <div class="card">
+          <div class="card-header">
+            <h5 class="mb-0">
+              <i class="bi bi-box me-2"></i>Available Orders
+            </h5>
+          </div>
+          <div class="card-body">
+            @if (orders.length > 0) {
+              <div class="order-list">
+                @for (order of orders; track order.id) {
+                  <div class="order-item mb-3 p-3 border rounded">
+                    <div class="d-flex justify-content-between align-items-start mb-2">
+                      <div>
+                        <h6 class="mb-1">Order #{{ order.id }}</h6>
+                        <small class="text-muted">{{ order.orderDate | date:'short' }}</small>
+                      </div>
+                      <span class="badge bg-info">
+                        <i class="bi bi-box me-1"></i>
+                        {{ order.status }}
+                      </span>
+                    </div>
+                    
+                    <div class="order-details">
+                      <div class="row">
+                        <div class="col-md-6">
+                          <small class="text-muted">
+                            <i class="bi bi-geo-alt me-1"></i>
+                            {{ order.shippingAddress }}
+                          </small>
+                        </div>
+                        <div class="col-md-6">
+                          <small class="text-muted">
+                            <i class="bi bi-currency-dollar me-1"></i>
+                            ${{ order.totalAmount }}
+                          </small>
+                        </div>
+                      </div>
+                      
+                      <div class="row mt-2">
+                        <div class="col-md-6">
+                          <small class="text-muted">
+                            <i class="bi bi-boxes me-1"></i>
+                            {{ order.items?.length || 0 }} items
+                          </small>
+                        </div>
+                        <div class="col-md-6">
+                          <small class="text-muted">
+                            <i class="bi bi-person me-1"></i>
+                            {{ order.customerName }}
+                          </small>
+                        </div>
+                      </div>
+                    </div>
+                    
+                    <div class="order-actions mt-3">
+                      <button class="btn btn-success btn-sm me-2">
+                        <i class="bi bi-truck me-1"></i>Accept Delivery
+                      </button>
+                      <button class="btn btn-outline-info btn-sm">
+                        <i class="bi bi-eye me-1"></i>View Details
+                      </button>
+                    </div>
+                  </div>
+                }
+              </div>
+            } @else {
+              <div class="text-center py-4">
+                <i class="bi bi-inbox display-4 text-muted"></i>
+                <h6 class="mt-2 text-muted">No Available Orders</h6>
+                <p class="text-muted">There are no orders ready for delivery at the moment.</p>
+              </div>
+            }
+          </div>
+        </div>
+      </div>
+    </div>
+  }
+</div> 

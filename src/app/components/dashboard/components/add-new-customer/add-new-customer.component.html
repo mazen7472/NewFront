@@ -1,0 +1,37 @@
+<div class="card p-4 shadow-sm">
+  <h4 class="mb-3">Add New Customer</h4>
+
+  <form (ngSubmit)="submitForm()" #form="ngForm">
+    <div class="mb-3">
+      <label class="form-label">Name</label>
+      <input type="text" class="form-control" required [(ngModel)]="customer.name" name="name">
+    </div>
+
+    <div class="mb-3">
+      <label class="form-label">Email</label>
+      <input type="email" class="form-control" required [(ngModel)]="customer.email" name="email">
+    </div>
+
+    <div class="mb-3">
+      <label class="form-label">Phone</label>
+      <input type="tel" class="form-control" [(ngModel)]="customer.phone" name="phone">
+    </div>
+
+    <div class="mb-3">
+      <label class="form-label">Role</label>
+      <select class="form-select" [(ngModel)]="customer.role" name="role" required>
+        @for (role of roles; track $index) {
+          <option [value]="role">{{ role }}</option>
+        }
+      </select>
+    </div>
+
+    <button class="btn btn-primary w-100 mt-2" type="submit">Add Customer</button>
+  </form>
+
+  @if (submitted) {
+    <div class="alert alert-success mt-4">
+      <strong>{{ customer.name }}</strong> was added as a <strong>{{ customer.role }}</strong>.
+    </div>
+  }
+</div>

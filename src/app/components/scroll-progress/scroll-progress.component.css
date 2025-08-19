@@ -1,0 +1,77 @@
+#progress {
+  position: fixed;
+  bottom: 25px;
+  left: 25px;
+  height: 70px;
+  width: 70px;
+  border-radius: 50%;
+  cursor: pointer;
+  z-index: 1000;
+
+  display: flex;
+  align-items: center;
+  justify-content: center;
+
+  background: conic-gradient(var(--primary-color) 0%, transparent 0%);
+  background-color: var(--card-bg);
+
+  box-shadow:
+    0 0 10px var(--primary-color),
+    0 0 20px var(--accent-blue),
+    0 0 30px var(--accent-red);
+
+  transition: transform 0.3s ease, box-shadow 0.3s ease;
+  animation: pulse-glow 2s infinite;
+}
+
+#progress::before {
+  content: "";
+  position: absolute;
+  height: 50px;
+  width: 50px;
+  background-color: var(--bg-color);
+  border-radius: 50%;
+  z-index: 1;
+}
+
+#progress-value {
+  position: relative;
+  z-index: 2;
+  font-size: 20px;
+  color: var(--text-primary);
+  text-shadow:
+    0 0 4px var(--primary-color),
+    0 0 8px var(--accent-blue),
+    0 0 12px var(--accent-red);
+  font-family: 'Orbitron', sans-serif;
+  pointer-events: none;
+}
+
+#progress:hover {
+  transform: scale(1.1);
+  box-shadow:
+    0 0 20px var(--accent-red),
+    0 0 40px var(--primary-color),
+    0 0 60px var(--accent-blue);
+}
+
+@keyframes pulse-glow {
+  0% {
+    box-shadow:
+      0 0 10px var(--primary-color),
+      0 0 20px var(--accent-blue),
+      0 0 30px var(--accent-red);
+  }
+  50% {
+    box-shadow:
+      0 0 20px var(--accent-red),
+      0 0 30px var(--primary-color),
+      0 0 40px var(--accent-blue);
+  }
+  100% {
+    box-shadow:
+      0 0 10px var(--primary-color),
+      0 0 20px var(--accent-blue),
+      0 0 30px var(--accent-red);
+  }
+}

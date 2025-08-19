@@ -1,0 +1,84 @@
+﻿<div class="section min-h-screen flex items-center justify-center">
+  <div class="container max-w-md">
+    <div class="card">
+      <div class="card-body p-8">
+        <!-- Header -->
+        <div class="text-center mb-8">
+          <h1 class="text-3xl font-bold mb-2">Welcome Back</h1>
+          <p class="text-tertiary">Sign in to your account to continue</p>
+        </div>
+
+        <!-- Login Form -->
+        <form [formGroup]="loginForm" (ngSubmit)="loginSubmit()" class="space-y-6">
+          <!-- Email Field -->
+          <div>
+            <label for="loginEmail" class="block text-sm font-medium mb-2"></label>
+            <div class="relative">
+              <i class="bi bi-envelope  text-tertiary"> Email Address</i>
+              <input 
+                type="email" 
+                formControlName="email" 
+                id="loginEmail" 
+                class="form-input pl-10 w-full"
+                placeholder="Enter your email"
+                required
+              >
+            </div>
+          </div>
+          
+          <!-- Password Field -->
+          <div>
+            <label for="loginPassword" class="block text-sm font-medium mb-2"></label>
+            <div class="relative">
+              <i class="bi bi-lock  text-tertiary"> Password</i>
+              <input 
+                type="password" 
+                formControlName="password" 
+                id="loginPassword" 
+                class="form-input pl-10 w-full"
+                placeholder="Enter your password"
+                required
+              >
+            </div>
+          </div>
+          
+          <!-- Error Message -->
+          @if (errorMessage) {
+            <div class="bg-error/10 border border-error/20 rounded-lg p-4 text-error">
+              <div class="flex items-center gap-2">
+                <i class="bi bi-exclamation-triangle"></i>
+                <span>{{ errorMessage }}</span>
+              </div>
+            </div>
+          }
+          
+          <!-- Submit Button -->
+          <button 
+            type="submit" 
+            class="btn btn-primary w-full"
+            [disabled]="isLoading"
+          >
+            @if (!isLoading) {
+              <span>Sign In</span>
+              <i class="bi bi-arrow-right ms-2"></i>
+            } @else {
+              <div class="w-4 h-4 border-2 border-white border-t-transparent rounded-full animate-spin me-2"></div>
+              <span>Signing in...</span>
+            }
+          </button>
+        </form>
+        
+        <!-- Footer Links -->
+        <div class="text-center mt-6 space-y-2">
+          <p class="text-sm text-tertiary">
+            Don't have an account? 
+            <a routerLink="/register" class="text-primary hover:text-primary-600 font-medium">Sign Up</a>
+          </p>
+          <a routerLink="/forgot-password" class="text-sm text-tertiary hover:text-primary transition-colors">
+            Forgot Password?
+          </a>
+        </div>
+      </div>
+    </div>
+  </div>
+</div>

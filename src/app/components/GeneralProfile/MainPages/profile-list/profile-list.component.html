@@ -1,0 +1,23 @@
+<div *ngIf="loading">Loading profiles...</div>
+
+<ul *ngIf="!loading">
+  <li
+    *ngFor="let profile of profiles; trackBy: trackByUserId"
+    class="cursor-pointer"
+    (click)="viewDetails(profile.userId)"
+    style="display:flex; align-items:center; gap:.75rem; padding:.5rem 0;"
+  >
+    <img
+      [src]="getPhotoUrl(profile)"
+      [alt]="profile.fullName || 'User'"
+      width="40"
+      height="40"
+      style="border-radius:50%; object-fit:cover;"
+      (error)="onImgError($event)"
+    />
+    <span>
+      {{ profile.fullName }} ({{ profile.userName }}) - Roles:
+      {{ profile?.roleNames?.join(', ') }}
+    </span>
+  </li>
+</ul>

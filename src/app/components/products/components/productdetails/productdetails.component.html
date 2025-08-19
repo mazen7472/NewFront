@@ -1,0 +1,150 @@
+﻿<div class="product-details-wrapper" *ngIf="product">
+  <!-- Title -->
+  <h1 class="product-title">{{ product.name }}</h1>
+
+  <div class="details-layout">
+    <!-- Main Content -->
+    <div class="details-main">
+      <!-- Wishlist Button -->
+      <button
+        type="button"
+        class="btn wishlist-btn"
+        (click)="onAddToWishlist(product)"
+        title="Add to Wishlist"
+      >
+        <i class="bi bi-heart"></i>
+      </button>
+
+      <!-- Product Images Slider -->
+      <div class="image-slider-wrapper text-center mb-4">
+        <img
+          [src]="selectedImage || (product.imageUrl || 'https://picsum.photos/seed/' + product.id + '/600/400')"
+          [alt]="product.name"
+          class="product-image img-fluid rounded shadow-lg"
+        />
+        <div
+          *ngIf="productImages && productImages.length > 1"
+          class="slider d-flex justify-content-center gap-2 mt-3"
+        >
+          <div
+            class="slide"
+            *ngFor="let img of productImages"
+            [ngClass]="{ active: selectedImage === img }"
+            (click)="selectImage(img)"
+          >
+            <img
+              [src]="img || 'https://picsum.photos/seed/' + product.id + '/300/200'"
+              [alt]="product.name"
+            />
+          </div>
+        </div>
+      </div>
+
+      <!-- Product Description -->
+      <p class="product-description mt-3">
+        {{ product.description || 'No description provided.' }}
+      </p>
+
+      <!-- Meta Info -->
+      <div class="product-meta mt-3 text-center">
+        <span><strong>Category:</strong> {{ product.categoryName || '—' }}</span>
+        <span><strong>Subcategory:</strong> {{ product.subCategoryName || '—' }}</span>
+        <span>
+          <strong>Status:</strong>
+          <span
+            class="badge status-badge"
+            [ngClass]="{
+              approved: product.status === 'Approved',
+              pending: product.status === 'Pending',
+              rejected: product.status === 'Rejected'
+            }"
+          >
+            {{ product.status }}
+          </span>
+        </span>
+      </div>
+
+      <!-- Pricing -->
+      <div class="product-pricing mt-3 text-center">
+        <ng-container
+          *ngIf="product.discountPrice && product.discountPrice < product.price; else regularPrice"
+        >
+          <span class="price-discount fw-bold">${{ product.discountPrice }}</span>
+          <span class="price-original">${{ product.price }}</span>
+        </ng-container>
+        <ng-template #regularPrice>
+          <span class="price-normal fw-bold">${{ product.price }}</span>
+        </ng-template>
+      </div>
+
+      <!-- Specifications -->
+      <div *ngIf="product.specifications?.length" class="product-specifications mt-4">
+        <h3 class="specs-title">Specifications</h3>
+        <div class="specs-container">
+          <div class="spec-row" *ngFor="let spec of product.specifications">
+            <span class="spec-key">{{ spec.key }}</span>
+            <span class="spec-value">{{ spec.value }}</span>
+          </div>
+        </div>
+      </div>
+
+      <!-- Fallback -->
+      <div *ngIf="!product.specifications?.length" class="mt-3">
+        <p>No specifications available for this product.</p>
+      </div>
+
+      <!-- Actions -->
+      <div class="mt-4 d-flex justify-content-center gap-3 flex-wrap">
+        <button
+          class="btn btn-primary btn-action rounded-pill px-4"
+          (click)="onAddToCart()"
+        >
+          <i class="bi bi-cart-plus me-1"></i> Add to Cart
+        </button>
+        <button
+          class="btn btn-outline-danger btn-action rounded-pill px-4"
+          (click)="onAddToWishlist(product)"
+        >
+          <i class="bi bi-heart me-1"></i> Wishlist
+        </button>
+        <a
+          *ngIf="product.link"
+          [href]="product.link"
+          target="_blank"
+          class="btn btn-outline-primary btn-action rounded-pill px-4"
+        >
+          View on Website <i class="bi bi-box-arrow-up-right ms-1"></i>
+        </a>
+      </div>
+    </div>
+
+    <!-- Company Info (with logo) -->
+<div
+  *ngIf="product.techCompanyName || product.techCompanyAddress"
+  class="product-company-info text-center mt-4"
+>
+  <img
+    *ngIf="product"
+    [src]="product.TechCompanyImage || defaultPhotoUrl"
+    alt="{{ product.techCompanyName }}"
+    class="company-logo mb-2"
+  />
+
+  <small class="">
+    <i class="bi bi-building me-1"></i>
+    {{ product.techCompanyName || 'Unknown Company' }}
+    <span *ngIf="product.techCompanyAddress"> — {{ product.techCompanyAddress }}</span>
+  </small>
+</div>
+
+
+<!-- Fallback if product not found -->
+<div class="product-details-wrapper text-center" *ngIf="!product">
+  <h2 class="product-title">Product Not Found</h2>
+  <p class="product-description">
+    This product does not exist or is no longer available.
+  </p>
+  <a routerLink="/build" class="btn btn-outline-secondary rounded-pill mt-3"
+    >← Back to Build</a
+  >
+</div>

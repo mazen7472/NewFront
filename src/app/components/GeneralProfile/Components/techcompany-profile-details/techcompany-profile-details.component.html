@@ -1,0 +1,11 @@
+<div *ngIf="company">
+  <h3>Tech Company Details</h3>
+  <p><strong>Description:</strong> {{ company.description }}</p>
+  <p><strong>Rating:</strong> {{ company.rating }}</p>
+  <p><strong>Products:</strong></p>
+  <ul>
+    <li *ngFor="let product of company.products">
+      {{ product.name }} - ${{ product.price }}
+    </li>
+  </ul>
+</div>

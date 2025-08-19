@@ -1,0 +1,110 @@
+.card {
+  background-color: var(--card-bg);
+  border: 1px solid var(--border-color);
+  color: var(--text-primary);
+}
+
+.card-img-top {
+  object-fit: cover;
+  height: 150px;
+}
+
+.card-title {
+  color: var(--text-primary);
+}
+
+.card-text {
+  color: var(--text-secondary);
+}
+
+.text-muted {
+  --bs-text-opacity: 1;
+  color: rgba(0, 172, 100, 0.75) !important;
+}
+
+.btn-outline-primary {
+  color: var(--accent-blue);
+  border-color: var(--accent-blue);
+}
+
+.btn-outline-primary:hover {
+  background-color: var(--accent-blue);
+  color: var(--button-text);
+}
+
+
+.card-img-top{
+  width: 100%;
+  height: auto;
+  object-fit: fit;
+  border-top-left-radius: 0.5rem;
+  border-top-right-radius: 0.5rem;
+}
+
+.wishlist-btn {
+  width: 48px;
+  height: 48px;
+  border: 2px solid var(--border-color);
+  border-radius: 50%;
+  cursor: pointer;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  background: rgba(30, 34, 48, 0.7);
+  backdrop-filter: blur(10px);
+  box-shadow: 0 4px 12px var(--shadow-color),
+              inset 0 0 4px rgba(76, 166, 255, 0.2);
+  transition: transform 0.35s ease, 
+              box-shadow 0.3s ease, 
+              background 0.3s ease, 
+              border-color 0.3s ease;
+  position: relative;
+  overflow: hidden;
+  z-index: 2;
+  border: 2px solid var(--accent-red);
+}
+
+.wishlist-btn::before {
+  content: '';
+  position: absolute;
+  width: 160%;
+  height: 160%;
+  background: radial-gradient(circle, rgba(76, 166, 255, 0.15) 0%, transparent 60%);
+  opacity: 0;
+  transition: opacity 0.3s ease;
+  z-index: 1;
+  pointer-events: none;
+}
+
+.wishlist-btn:hover::before {
+  opacity: 1;
+}
+
+.wishlist-btn i {
+  font-size: 1.4rem;
+  color: var(--accent-red);
+  text-shadow: 0 0 6px rgba(255, 76, 76, 0.4);
+  transition: transform 0.3s ease, 
+              color 0.3s ease, 
+              text-shadow 0.3s ease;
+  z-index: 2;
+   
+}
+
+.wishlist-btn:hover {
+  transform: scale(1.1) rotate(6deg);
+  background: rgba(255, 90, 90, 0.425); 
+  box-shadow: 0 6px 18px rgba(255, 76, 76, 0.274),
+              inset 0 0 6px rgba(255, 76, 76, 0.25),
+              0 0 12px rgba(127, 90, 240, 0.25);
+  border-color: var(--accent-red);
+  
+  text-shadow: 0 0 14px rgba(255, 76, 76, 0.6),
+               0 0 6px rgba(127, 90, 240, 0.3);
+}
+
+.wishlist-btn:hover i {
+ color: rgb(255, 255, 255);
+ font-weight: bolder;
+   
+}

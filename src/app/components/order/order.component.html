@@ -1,0 +1,62 @@
+<div class="container my-5">
+  <h2 class="mb-4">My Orders</h2>
+
+  <!-- Loading Spinner -->
+  @if (isLoading) {
+    <div class="text-center">
+        <div class="spinner-border text-primary" role="status"></div>
+        <p class="mt-2">Loading orders...</p>
+    </div>
+  }
+
+  <!-- No Orders -->
+  @if (!isLoading && orders.length === 0) {
+    <div class="alert alert-info">
+        You have not placed any orders yet.
+    </div>
+  }
+
+  <!-- Orders List -->
+  @if (!isLoading && orders.length > 0) {
+    <div class="accordion" id="ordersAccordion">
+      <div class="accordion-item mb-3" *ngFor="let order of orders; let i = index">
+        <h2 class="accordion-header" id="heading{{ i }}">
+          <button class="accordion-button collapsed" type="button" data-bs-toggle="collapse" [attr.data-bs-target]="'#collapse' + i" aria-expanded="false" [attr.aria-controls]="'collapse' + i">
+            <div class="d-flex flex-column w-100">
+              <div class="d-flex justify-content-between">
+                <strong>Order #{{ order.id }}</strong>
+                <span class="badge"
+                      [ngClass]="{
+                        'bg-success': order.status === 'Completed',
+                        'bg-warning text-dark': order.status === 'Pending',
+                        'bg-danger': order.status === 'Cancelled'
+                      }">
+                  {{ order.status }}
+                </span>
+              </div>
+              <small class="text-muted">
+                {{ order.orderDate | date: 'medium' }} — Total: ${{ order.totalAmount }}
+              </small>
+            </div>
+          </button>
+        </h2>
+        <div [id]="'collapse' + i" class="accordion-collapse collapse" [attr.aria-labelledby]="'heading' + i" data-bs-parent="#ordersAccordion">
+          <div class="accordion-body">
+            <h6>Items:</h6>
+            <ul class="list-group list-group-flush">
+              @for (item of order.orderItems; track $index) {
+                <li class="list-group-item d-flex justify-content-between align-items-center">
+                <div>
+                  <strong>{{ item.productName }}</strong>
+                  <div class="text-muted small">Qty: {{ item.quantity }} × ${{ item.unitPrice }}</div>
+                </div>
+                <span class="fw-semibold text-end">${{ item.totalPrice }}</span>
+              </li>
+              }
+            </ul>
+          </div>
+        </div>
+      </div>
+    </div>
+  }
+</div>

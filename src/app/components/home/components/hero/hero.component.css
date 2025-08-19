@@ -1,0 +1,229 @@
+.hero {
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  padding: 2rem;
+  background-color: transparent;
+}
+
+.hero-container {
+  width: 95%;
+  max-width: 1400px;
+  display: flex;
+  flex-wrap: wrap;
+  justify-content: space-between;
+  align-items: center;
+  gap: 2rem;
+
+  background-color: var(--bg-color);
+  padding: 2.5rem;
+  border-radius: 2rem;
+
+  /* Glowing Border + Shadow */
+  border: 1px solid var(--accent-blue);
+  box-shadow:
+    0 0 10px var(--accent-blue),
+    0 0 25px rgba(76, 166, 255, 0.3),
+    0 10px 50px var(--shadow-color);
+
+  transition: all 0.3s ease;
+}
+.hero-container:hover {
+  box-shadow:
+    0 0 20px var(--accent-blue),
+    0 0 40px rgba(76, 166, 255, 0.4),
+    0 20px 60px var(--shadow-color);
+}
+.hero-content {
+  flex: 1 1 45%;
+  color: var(--text-primary);
+}
+
+.hero-content h2 {
+  font-size: 3.5rem;
+  font-weight: 700;
+  line-height: 1.2;
+  margin-bottom: 1rem;
+  color: #7f5af0;
+}
+
+.highlight{
+  color:var(--accent-blue);
+}
+.hero-content p {
+  font-size: 1.125rem;
+  line-height: 1.75rem;
+  margin-bottom: 2rem;
+  color: var(--text-secondary);
+}
+
+.hero-buttons {
+  display: flex;
+  gap: 1.5rem;
+  margin-bottom: 2rem;
+}
+
+.build-btn {
+  padding: 0.75rem 2rem;
+  font-size: 1rem;
+  border-radius: 2rem;
+  background-color: var(--accent-blue);
+  color: var(--button-text);
+  font-weight: 600;
+  border: none;
+  box-shadow: 0 0 10px var(--accent-blue);
+  transition: all 0.3s ease;
+}
+
+.build-btn:hover {
+  background-color: rgb(45,101,210);
+  box-shadow: 0 0 15px rgb(45,101,210);
+}
+.watch-btn {
+  padding: 0.75rem 2rem;
+  font-size: 1rem;
+  border-radius: 2rem;
+  background-color: transparent;
+  color: var(--accent-blue);
+  font-weight: 600;
+  border: none;
+  box-shadow: 0 0 10px var(--accent-blue);
+  transition: all 0.3s ease;
+}
+.watch-btn:hover{
+   background-color: var(--accent-blue);
+  box-shadow: 0 0 15px var(--accent-blue);
+  color: var(--text-primary);
+}
+.social-icons {
+  display: flex;
+  gap: 1rem;
+  align-items: center;
+}
+
+.social-icons a {
+  font-size: 1.5rem;
+  color: var(--accent-blue);
+  transition: color 0.3s ease, transform 0.3s ease;
+}
+
+.social-icons a:hover {
+  color: var(--accent-red);
+  transform: scale(1.15);
+}
+
+.hero-img {
+  flex: 1 1 45%;
+  display: flex;
+  justify-content: center;
+  align-items: center;
+}
+
+.hero-img img {
+  width: 100%;
+  max-width: 500px;
+  border-radius: 1rem;
+  transition: transform 0.3s ease;
+}
+
+.hero-img img:hover {
+  animation: shaking 1s infinite;
+}
+
+/* Shake Animation */
+@keyframes shaking {
+  0% { transform: translate(1px, 1px) rotate(0deg); }
+  10% { transform: translate(-1px, -2px) rotate(-1deg); }
+  20% { transform: translate(-3px, 0px) rotate(1deg); }
+  30% { transform: translate(3px, 2px) rotate(0deg); }
+  40% { transform: translate(1px, -1px) rotate(1deg); }
+  50% { transform: translate(-1px, 2px) rotate(-1deg); }
+  60% { transform: translate(-3px, 1px) rotate(0deg); }
+  70% { transform: translate(3px, 1px) rotate(-1deg); }
+  80% { transform: translate(-1px, -1px) rotate(1deg); }
+  90% { transform: translate(1px, 2px) rotate(0deg); }
+  100% { transform: translate(1px, -2px) rotate(-1deg); }
+}
+
+/* Responsive */
+@media screen and (max-width: 768px) {
+  .hero-container {
+    flex-direction: column;
+    padding: 1.5rem;
+    text-align: center;
+  }
+
+  .hero-content h2 {
+    font-size: 2.25rem;
+  }
+
+  .hero-content p {
+    font-size: 1rem;
+  }
+
+  .hero-img img {
+    max-width: 100%;
+  }
+
+  .build-btn {
+    width: 100%;
+    text-align: center;
+  }
+}
+
+@media (max-width: 768px) {
+  .social-icons {
+    justify-content: center;
+  }
+}
+
+/* Neon Glow Image */
+.glow-img {
+  width: 100%;
+  max-width: 280px;
+  filter: drop-shadow(0 0 2px #00ffff)
+          drop-shadow(0 0 4px #00ffffaa)
+          drop-shadow(0 0 6px #ff00ff66);
+  animation: pulseGlow 3s ease-in-out infinite;
+  transition: transform 0.3s ease;
+}
+
+.glow-img:hover {
+  transform: scale(1.03);
+}
+
+/* Glow pulse animation */
+@keyframes pulseGlow {
+  0% {
+    filter: drop-shadow(0 0 1px #00ffff)
+            drop-shadow(0 0 2px #ff00ff);
+  }
+  50% {
+    filter: drop-shadow(0 0 1px #00ffff)
+            drop-shadow(0 0 2px #ff00ff);
+  }
+  100% {
+    filter: drop-shadow(0 0 1px #00ffff)
+            drop-shadow(0 0 2px #ff00ff);
+  }
+}
+.hero-img {
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  margin-top: 2rem;
+}
+
+@media (max-width: 768px) {
+  .hero-buttons {
+    flex-direction: column;
+    gap: 1.3rem;
+  }
+
+  .hero-buttons button {
+    width: 100%;
+   
+    max-width: 280px;
+    margin: auto;
+  }
+}

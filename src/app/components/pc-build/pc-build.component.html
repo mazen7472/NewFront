@@ -1,0 +1,47 @@
+<form [formGroup]="buildForm" (ngSubmit)="onSubmit()" class="pc-build-form">
+  <!-- Form Header -->
+  <h2 class="form-title">Start Your PC Build</h2>
+  <p class="form-subtitle">Enter your build details & budget before selecting components</p>
+
+  <!-- Name -->
+  <div class="form-group floating-label">
+    <input id="name" type="text" formControlName="name" placeholder="Build Name" />
+    <!-- <label for="name">Build Name</label> -->
+    @if (buildForm.get('name')?.errors && buildForm.get('name')?.touched) {
+      <small class="error-text">Name is required.</small>
+    }
+  </div>
+
+  <!-- Description -->
+  <div class="form-group floating-label">
+    <input id="description" type="text" formControlName="description" placeholder="Description" />
+    <!-- <label for="description">Description</label> -->
+  </div>
+
+  <!-- Budget -->
+  <div class="form-group floating-label">
+    <input id="budget" type="number" formControlName="budget" placeholder="Budget ($)" />
+    <!-- <label for="budget">Budget ($)</label> -->
+    @if (buildForm.get('budget')?.errors && buildForm.get('budget')?.touched) {
+      <small class="error-text">Budget must be greater than 0.</small>
+    }
+  </div>
+
+  <!-- Submit -->
+  <button type="submit" [disabled]="isSubmitting || buildForm.invalid" class="submit-button">
+    @if (!isSubmitting) {
+      <span>Continue</span>
+    } @else {
+      <span class="loader"></span>
+      <span>Submitting...</span>
+    }
+  </button>
+
+  <!-- Messages -->
+  @if (successMessage) {
+    <div class="alert success">{{ successMessage }}</div>
+  }
+  @if (errorMessage) {
+    <div class="alert error">{{ errorMessage }}</div>
+  }
+</form>

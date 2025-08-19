@@ -1,0 +1,49 @@
+<!-- Chat Container -->
+<div class="chat-container">
+
+  <!-- Connection status -->
+  <div class="status" [ngClass]="connectionState">
+    {{ connectionState | uppercase }}
+  </div>
+  <!-- Messages List -->
+  <div class="messages">
+    <div *ngFor="let msg of messages" class="message" 
+         [ngClass]="{ 'my-message': msg.senderUserId === myUserId }">
+
+    
+
+      <!-- Message Bubble -->
+      <div class="bubble">
+        
+
+       <span class="sender">
+        {{ msg.senderName || msg.senderUserId }}:
+       </span>
+      <span class="text">{{ msg.messageText }}</span>
+        <!-- Time & Read Status -->
+        <span class="meta">
+          <span class="time">{{ msg.sentAt | date: 'shortTime' }}</span>
+        </span>
+
+        <!-- Message Actions -->
+      </div>
+    </div>
+  </div>
+
+  <!-- Input Area -->
+  <div class="input-area">
+    <div class="input-wrap">
+      
+      <input type="text"
+             [(ngModel)]="newMessage"
+             placeholder="Type a message..."
+             (keydown)="sendTyping()"
+             (keyup.enter)="sendMessage()" />
+    </div>
+    <button class="send-btn" (click)="sendMessage()">Send</button>
+  </div>
+
+  <!-- Emoji Picker (floating) -->
+  
+    
+  </div>

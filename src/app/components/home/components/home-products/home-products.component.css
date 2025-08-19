@@ -1,0 +1,114 @@
+/* === Component-Level Styles === */
+
+.featured-products {
+  color: var(--text-primary);
+}
+
+/* Product Card */
+.product-card {
+  background-color: var(--card-bg);
+  border: 1px solid var(--border-color);
+  box-shadow: 0 4px 10px var(--shadow-color);
+  transition: transform 0.2s ease, box-shadow 0.2s ease;
+}
+
+.product-card:hover {
+  transform: translateY(-5px);
+  box-shadow: 0 8px 20px var(--shadow-color);
+}
+
+.product-image {
+  object-fit: cover;
+  max-height: 200px;
+}
+
+/* Texts */
+.card-title,
+.card-text {
+  color: var(--text-primary);
+}
+
+.themed-alert {
+  background-color: var(--accent-red);
+  color: var(--badge-text-color);
+  border: none;
+}
+
+/* Buttons */
+.view-btn,
+.add-to-cart-btn {
+  border-radius: 0.5rem;
+  transition: background-color 0.3s ease;
+}
+
+.view-btn {
+  border-color: var(--primary-color);
+  color: var(--primary-color);
+}
+
+.view-btn:hover {
+  background-color: var(--primary-color);
+  color: var(--button-text);
+}
+
+.add-to-cart-btn {
+  background-color: var(--button-bg);
+  color: var(--button-text);
+  border: none;
+}
+
+.add-to-cart-btn:hover {
+  background-color: var(--button-hover-bg);
+}
+
+/* === Status Badge === */
+
+.status-badge {
+  padding: 0.4em 0.75em;
+  font-size: 0.75rem;
+  font-weight: 600;
+  border-radius: 1rem;
+  color: var(--badge-text-color);
+  background-color: var(--badge-inactive-bg); /* fallback */
+  transition: background-color 0.3s ease, box-shadow 0.3s ease;
+  display: inline-flex;
+  align-items: center;
+  gap: 0.4rem;
+}
+
+.status-badge.available {
+  background-color: var(--badge-active-bg);
+  animation: pulse-available 2s infinite;
+}
+
+.status-badge.out-of-stock {
+  background-color: var(--accent-red);
+}
+
+.status-icon i {
+  font-size: 1rem;
+  vertical-align: middle;
+}
+
+
+
+
+@keyframes pulse-available {
+  0% {
+    box-shadow: 0 0 0 0 color-mix(in srgb, var(--badge-active-bg), transparent 60%);
+  }
+  70% {
+    box-shadow: 0 0 0 10px color-mix(in srgb, var(--badge-active-bg), transparent 100%);
+  }
+  100% {
+    box-shadow: 0 0 0 0 color-mix(in srgb, var(--badge-active-bg), transparent 100%);
+  }
+}
+
+.product-image {
+  width: 100%;
+  height: 200px;
+  object-fit: cover;
+  border-top-left-radius: 0.5rem;
+  border-top-right-radius: 0.5rem;
+}

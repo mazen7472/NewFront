@@ -1,0 +1,271 @@
+<div class="section min-h-screen flex items-center justify-center">
+  <div class="container max-w-2xl">
+    <div class="grid grid-cols-1 lg:grid-cols-2 gap-8">
+      <!-- Left Side - Image/Info -->
+      <div class="hidden lg:block">
+        <div class="card h-full bg-gradient-to-br from-primary-500 to-primary-600 text-white">
+          <div class="card-body p-8 flex flex-col justify-center">
+            <div class="text-center">
+              <div class="w-24 h-24 mx-auto mb-6 bg-white/20 rounded-full flex items-center justify-center">
+                <i class="bi bi-people text-4xl"></i>
+              </div>
+              <h2 class="text-3xl font-bold mb-4">Join Our Community</h2>
+              <p class="text-lg opacity-90">
+                Create your account and unlock exclusive features for building your dream PC
+              </p>
+            </div>
+          </div>
+        </div>
+      </div>
+
+      <!-- Right Side - Form -->
+      <div class="card">
+        <div class="card-body p-8">
+          <!-- Header -->
+          <div class="text-center mb-8">
+            <h1 class="text-3xl font-bold mb-2">Create Your Account</h1>
+            <p class="text-tertiary">Join thousands of users building amazing PCs</p>
+          </div>
+
+          <!-- Registration Form -->
+          <form [formGroup]="registerForm" (ngSubmit)="registerSubmit()" class="space-y-6">
+            <!-- Full Name -->
+            <div>
+              <label for="fullName" class="block text-sm font-medium mb-2"></label>
+              <div class="relative">
+                <i class="bi bi-person  text-tertiary"> Full Name</i>
+                <input 
+                  type="text" 
+                  id="fullName" 
+                  formControlName="fullName"
+                  class="form-input pl-10 w-full"
+                  placeholder="Enter your full name"
+                />
+              </div>
+            </div>
+
+            <!-- Username -->
+            <div>
+              <label for="userName" class="block text-sm font-medium mb-2"></label>
+              <div class="relative">
+                <i class="bi bi-at text-tertiary"> Username</i>
+                <input 
+                  type="text" 
+                  id="userName" 
+                  formControlName="userName"
+                  class="form-input pl-10 w-full"
+                  placeholder="Choose a username"
+                />
+              </div>
+            </div>
+
+            <!-- Email -->
+            <div>
+              <label for="email" class="block text-sm  font-medium mb-2"></label>
+              <div class="relative">
+                <i class="bi bi-envelope text-tertiary"> Email Address</i>
+                <input 
+                  type="email" 
+                  id="email" 
+                  formControlName="email"
+                  class="form-input pl-10 w-full"
+                  placeholder="Enter your email"
+                />
+              </div>
+            </div>
+
+            <!-- Address -->
+            <div>
+              <label for="address" class="block text-sm font-medium mb-2"></label>
+              <div class="relative">
+                <i class="bi bi-geo-alt text-tertiary"> Address</i>
+                <input 
+                  type="text" 
+                  id="address" 
+                  formControlName="address"
+                  class="form-input pl-10 w-full"
+                  placeholder="Enter your address"
+                />
+              </div>
+            </div>
+
+            <!-- City and Country -->
+            <div class="grid grid-cols-1 md:grid-cols-2 gap-4">
+              <div>
+                <label for="city" class="block text-sm font-medium mb-2"></label>
+                <div class="relative">
+                  <i class="bi bi-building text-tertiary"> City (Optional)</i>
+                  <input 
+                    type="text" 
+                    id="city" 
+                    formControlName="city"
+                    class="form-input pl-10 w-full"
+                    placeholder="Enter your city"
+                  />
+                </div>
+              </div>
+
+              <div>
+                <label for="country" class="block text-sm font-medium mb-2"></label>
+                <div class="relative">
+                  <i class="bi bi-globe text-tertiary"> Country (Optional)</i>
+                  <input 
+                    type="text" 
+                    id="country" 
+                    formControlName="country"
+                    class="form-input pl-10 w-full"
+                    placeholder="Enter your country"
+                  />
+                </div>
+              </div>
+            </div>
+
+            <!-- Profile Photo -->
+            <div>
+              <label for="profilePhoto" class="block text-sm font-medium mb-2"></label>
+              <div class="relative">
+                <i class="bi bi-camera"> Profile Photo (Optional)</i>
+                <input 
+                  type="file" 
+                  id="profilePhoto" 
+                  (change)="onFileSelected($event)"
+                  accept="image/*"
+                  class="form-input pl-10 w-full"
+                />
+              </div>
+              <p class="text-xs text-tertiary mt-1">Max file size: 5MB. Supported formats: JPG, PNG, GIF</p>
+            </div>
+
+            <!-- Password -->
+            <div>
+              <label for="password" class="block text-sm font-medium mb-2"></label>
+              <div class="relative">
+                <i class="bi bi-lock  text-tertiary"> Password</i>
+                <input 
+                  type="password" 
+                  id="password" 
+                  formControlName="password"
+                  class="form-input pl-10 w-full"
+                  placeholder="Create a password"
+                />
+              </div>
+            </div>
+
+            <!-- Confirm Password -->
+            <div>
+              <label for="confirmPassword" class="block text-sm font-medium mb-2"></label>
+              <div class="relative">
+                <i class="bi bi-check-circle text-tertiary"> Confirm Password</i>
+                <input 
+                  type="password" 
+                  id="confirmPassword" 
+                  formControlName="confirmPassword"
+                  class="form-input pl-10 w-full"
+                  placeholder="Confirm your password"
+                />
+              </div>
+            </div>
+
+            <!-- Phone -->
+            <div>
+              <label for="phone" class="block text-sm font-medium mb-2"></label>
+              <div class="relative">
+                <i class="bi bi-telephone  text-tertiary"> Phone Number</i>
+                <input 
+                  type="text" 
+                  id="phone" 
+                  formControlName="phoneNumber"
+                  class="form-input pl-10 w-full"
+                  placeholder="Enter your phone number"
+                />
+              </div>
+            </div>
+
+            <!-- Role Selection -->
+            <div>
+              <label class="block text-sm font-medium mb-3 text-tertiary">Select Role</label>
+              <p class="text-sm text-tertiary mb-3">Choose your role to determine your access level and permissions.</p>
+              @if (loadingRoles) {
+                <div class="text-center py-4">
+                  <div class="w-6 h-6 border-2 border-primary border-t-transparent rounded-full animate-spin mx-auto mb-2"></div>
+                  <span class="text-sm text-tertiary">Loading roles...</span>
+                </div>
+              } @else {
+                <div class="form-group">
+                  <select 
+                    class="form-select" 
+                    formControlName="selectedRole"
+                    [class.is-invalid]="registerForm.get('selectedRole')?.invalid && registerForm.get('selectedRole')?.touched"
+                  >
+                    <option value="">Choose your role...</option>
+                    @for (role of availableRoles; track role.id) {
+                      <option [value]="role.id">{{ role.name }} - {{ role.description }}</option>
+                    }
+                  </select>
+                  @if (registerForm.get('selectedRole')?.invalid && registerForm.get('selectedRole')?.touched) {
+                    <div class="invalid-feedback">
+                      Please select a role.
+                    </div>
+                  }
+                </div>
+                @if (registerForm.get('selectedRole')?.value) {
+                  <div class="mt-3 p-3 bg-light border rounded">
+                    <div class="d-flex align-items-center">
+                      <i class="bi bi-shield-check text-primary me-2"></i>
+                      <div>
+                        <strong>Selected Role: {{ getSelectedRoleName() }}</strong>
+                      </div>
+                    </div>
+                  </div>
+                }
+              }
+            </div>
+
+            <!-- Error Message -->
+            @if (errMassage) {
+              <div class="bg-error/10 border border-error/20 rounded-lg p-4 text-error">
+                <div class="flex items-center gap-2">
+                  <i class="bi bi-exclamation-triangle"></i>
+                  <span>{{ errMassage }}</span>
+                </div>
+              </div>
+            }
+
+            <!-- Success Message -->
+            @if (success) {
+              <div class="bg-success/10 border border-success/20 rounded-lg p-4 text-success">
+                <div class="flex items-center gap-2">
+                  <i class="bi bi-check-circle"></i>
+                  <span>Registration successful! Redirecting to login...</span>
+                </div>
+              </div>
+            }
+
+            <!-- Submit Button -->
+            <button 
+              type="submit" 
+              class="btn btn-primary w-full"
+              [disabled]="isLoading"
+            >
+              @if (!isLoading) {
+                <span>Create Account</span>
+                <i class="bi bi-arrow-right ms-2"></i>
+              } @else {
+                <div class="w-4 h-4 border-2 border-white border-t-transparent rounded-full animate-spin me-2"></div>
+                <span>Creating Account...</span>
+              }
+            </button>
+          </form>
+
+          <!-- Footer -->
+          <div class="text-center mt-6">
+            <p class="text-sm text-tertiary">
+              Already have an account?
+              <a routerLink="/log-in" class="text-primary hover:text-primary-600 font-medium">Sign In</a>
+            </p>
+          </div>
+        </div>
+      </div>
+    </div>
+  </div>
+</div>

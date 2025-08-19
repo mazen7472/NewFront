@@ -1,0 +1,160 @@
+﻿<div class="dashboard-container">
+  <!-- Sidebar -->
+  <nav class="sidebar">
+    <div class="sidebar-header">
+      <div class="logo-container">
+        <i class="bi bi-speedometer2 logo-icon"></i>
+        <h5 class="logo-text">Admin Panel</h5>
+      </div>
+    </div>
+    
+    <!-- Navigation Menu -->
+    <ul class="nav flex-column">
+      <!-- Overview -->
+      <li class="nav-item">
+        <a class="nav-link" routerLink="/dashboard/overview" routerLinkActive="active">
+          <i class="bi bi-house me-3"></i> <span>Overview</span>
+        </a>
+      </li>
+
+      <!-- Product Management -->
+      <li class="nav-item">
+        <a class="nav-link" routerLink="/dashboard/products" routerLinkActive="active">
+          <i class="bi bi-box-seam me-3"></i> <span>All Products</span>
+        </a>
+      </li>
+      <li class="nav-item">
+        <a class="nav-link" routerLink="/dashboard/pending-products" routerLinkActive="active">
+          <i class="bi bi-clock-history me-3"></i> <span>Pending Products</span>
+        </a>
+      </li>
+
+      <!-- Order Management -->
+      <li class="nav-item">
+        <a class="nav-link" routerLink="/dashboard/orders" routerLinkActive="active">
+          <i class="bi bi-cart-check me-3"></i> <span>All Orders</span>
+        </a>
+      </li>
+
+      <!-- User Management -->
+      <li class="nav-item">
+        <a class="nav-link" routerLink="/dashboard/customers" routerLinkActive="active">
+          <i class="bi bi-people me-3"></i> <span>Customers</span>
+        </a>
+      </li>
+      <li class="nav-item">
+        <a class="nav-link" routerLink="/dashboard/tech-companies" routerLinkActive="active">
+          <i class="bi bi-building me-3"></i> <span>Tech Companies</span>
+        </a>
+      </li>
+      <li class="nav-item">
+        <a class="nav-link" routerLink="/dashboard/delivery-persons" routerLinkActive="active">
+          <i class="bi bi-truck me-3"></i> <span>Delivery Persons</span>
+        </a>
+      </li>
+      <li class="nav-item">
+        <a class="nav-link" routerLink="/dashboard/role-management" routerLinkActive="active">
+          <i class="bi bi-kanban me-3"></i> <span>Role Management</span>
+        </a>
+      </li>
+
+      <!-- Service Management -->
+      <li class="nav-item">
+        <a class="nav-link" routerLink="/dashboard/maintenance-requests" routerLinkActive="active">
+          <i class="bi bi-tools me-3"></i> <span>Maintenance</span>
+        </a>
+      </li>
+      <li class="nav-item">
+        <a class="nav-link" routerLink="/dashboard/pc-assemblies" routerLinkActive="active">
+          <i class="bi bi-cpu me-3"></i> <span>PC Assemblies</span>
+        </a>
+      </li>
+
+      <!-- Delivery Management -->
+      <li class="nav-item">
+        <a class="nav-link" routerLink="/dashboard/deliveries" routerLinkActive="active">
+          <i class="bi bi-box-arrow-right me-3"></i> <span>Deliveries</span>
+        </a>
+      </li>
+      <li class="nav-item">
+        <a class="nav-link" routerLink="/dashboard/assign-delivery" routerLinkActive="active">
+          <i class="bi bi-person-check me-3"></i> <span>Assign Delivery</span>
+        </a>
+      </li>
+
+      <!-- Commission Management -->
+      <li class="nav-item">
+        <a class="nav-link" routerLink="/dashboard/commissions" routerLinkActive="active">
+          <i class="bi bi-percent me-3"></i> <span>Commissions</span>
+        </a>
+      </li>
+      <li class="nav-item">
+        <a class="nav-link" routerLink="/dashboard/commission-settings" routerLinkActive="active">
+          <i class="bi bi-gear me-3"></i> <span>Commission Settings</span>
+        </a>
+      </li>
+
+      <!-- Category Management -->
+      <li class="nav-item">
+        <a class="nav-link" routerLink="/dashboard/categories" routerLinkActive="active">
+          <i class="bi bi-tags me-3"></i> <span>Categories</span>
+        </a>
+      </li>
+      <li class="nav-item">
+        <a class="nav-link" routerLink="/dashboard/subcategories" routerLinkActive="active">
+          <i class="bi bi-tag me-3"></i> <span>Subcategories</span>
+        </a>
+      </li>
+
+      <!-- Notifications -->
+      <li class="nav-item">
+        <a class="nav-link" routerLink="/dashboard/notifications" routerLinkActive="active">
+          <i class="bi bi-bell me-3"></i> <span>Notifications</span>
+        </a>
+      </li>
+
+      <!-- Analytics & Reports -->
+      <li class="nav-item">
+        <a class="nav-link" routerLink="/dashboard/analytics" routerLinkActive="active">
+          <i class="bi bi-graph-up me-3"></i> <span>Analytics</span>
+        </a>
+      </li>
+      <li class="nav-item">
+        <a class="nav-link" routerLink="/dashboard/reports" routerLinkActive="active">
+          <i class="bi bi-file-earmark-text me-3"></i> <span>Reports</span>
+        </a>
+      </li>
+      
+      <!-- Profile & Settings -->
+      <li class="nav-item">
+        <a class="nav-link" routerLink="/dashboard/profile-settings" routerLinkActive="active">
+          <i class="bi bi-person-gear me-3"></i> <span>Profile Settings</span>
+        </a>
+      </li>
+    </ul>
+
+   
+  </nav>
+
+  <!-- Main Content -->
+  <main class="content">
+    <!-- Content Header -->
+    <div class="content-header">
+      <div class="header-content">
+        <h1 class="page-title">Admin Dashboard</h1>
+        <p class="page-subtitle">Manage your Techperts Solutions platform</p>
+      </div>
+      <div class="header-actions">
+        <div class="date-display">
+          <i class="bi bi-calendar3 me-2"></i>
+          {{ currentDate | date: 'EEEE, MMMM d, y' }}
+        </div>
+      </div>
+    </div>
+
+    <!-- Router Outlet for Child Components -->
+    <div class="content-body">
+      <router-outlet></router-outlet>
+    </div>
+  </main>
+</div>

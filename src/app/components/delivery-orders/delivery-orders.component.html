@@ -1,0 +1,169 @@
+<div class="delivery-orders-container">
+  <!-- Header -->
+  <div class="row mb-4">
+    <div class="col-12">
+      <div class="d-flex justify-content-between align-items-center">
+        <h2 class="mb-0">My Delivery Orders</h2>
+        <a routerLink="/delivery/dashboard" class="btn btn-outline-primary">
+          <i class="bi bi-arrow-left me-2"></i>Back to Dashboard
+        </a>
+      </div>
+    </div>
+  </div>
+
+  <!-- Stats Cards -->
+  <div class="row mb-4">
+    <div class="col-md-2 mb-3">
+      <div class="card stat-card">
+        <div class="card-body text-center">
+          <i class="bi bi-truck stat-icon text-primary"></i>
+          <h3 class="stat-number">{{ stats.total }}</h3>
+          <p class="stat-label">Total Orders</p>
+        </div>
+      </div>
+    </div>
+    <div class="col-md-2 mb-3">
+      <div class="card stat-card">
+        <div class="card-body text-center">
+          <i class="bi bi-clock stat-icon text-warning"></i>
+          <h3 class="stat-number">{{ stats.pending }}</h3>
+          <p class="stat-label">Pending</p>
+        </div>
+      </div>
+    </div>
+    <div class="col-md-2 mb-3">
+      <div class="card stat-card">
+        <div class="card-body text-center">
+          <i class="bi bi-truck stat-icon text-info"></i>
+          <h3 class="stat-number">{{ stats.inProgress }}</h3>
+          <p class="stat-label">In Progress</p>
+        </div>
+      </div>
+    </div>
+    <div class="col-md-2 mb-3">
+      <div class="card stat-card">
+        <div class="card-body text-center">
+          <i class="bi bi-check-circle stat-icon text-success"></i>
+          <h3 class="stat-number">{{ stats.completed }}</h3>
+          <p class="stat-label">Completed</p>
+        </div>
+      </div>
+    </div>
+    <div class="col-md-2 mb-3">
+      <div class="card stat-card">
+        <div class="card-body text-center">
+          <i class="bi bi-x-circle stat-icon text-danger"></i>
+          <h3 class="stat-number">{{ stats.cancelled }}</h3>
+          <p class="stat-label">Cancelled</p>
+        </div>
+      </div>
+    </div>
+  </div>
+
+  <!-- Loading State -->
+  @if (loading) {
+    <div class="text-center py-5">
+      <div class="spinner-border text-primary" role="status">
+        <span class="visually-hidden">Loading...</span>
+      </div>
+      <p class="mt-2">Loading delivery orders...</p>
+    </div>
+  }
+
+  <!-- Error State -->
+  @if (error && !loading) {
+    <div class="alert alert-danger">
+      <i class="bi bi-exclamation-triangle me-2"></i>
+      {{ error }}
+    </div>
+  }
+
+  <!-- Delivery Orders Table -->
+  @if (deliveries.length > 0 && !loading) {
+    <div class="card">
+      <div class="card-header">
+        <h5 class="mb-0">All Delivery Orders</h5>
+      </div>
+      <div class="card-body">
+        <div class="table-responsive">
+          <table class="table table-hover">
+            <thead>
+              <tr>
+                <th>Tracking #</th>
+                <th>Order #</th>
+                <th>Customer</th>
+                <th>Address</th>
+                <th>Status</th>
+                <th>Est. Delivery</th>
+                <th>Actions</th>
+              </tr>
+            </thead>
+            <tbody>
+              @for (delivery of deliveries; track delivery.id) {
+                <tr>
+                  <td>
+                    <strong>{{ delivery.trackingNumber }}</strong>
+                  </td>
+                  <td>{{ delivery.orderId }}</td>
+                  <td>
+                    <div>
+                      <strong>{{ delivery.customerName || 'N/A' }}</strong>
+                      <br>
+                      <small class="text-muted">{{ delivery.customerPhone }}</small>
+                    </div>
+                  </td>
+                  <td>
+                    <div class="address-cell">
+                      {{ delivery.deliveryAddress }}
+                    </div>
+                  </td>
+                  <td>
+                    <span class="badge" [ngClass]="getStatusBadgeClass(delivery.status)">
+                      <i class="bi me-1" [ngClass]="getStatusIcon(delivery.status)"></i>
+                      {{ delivery.status }}
+                    </span>
+                  </td>
+                  <td>
+                    <small>{{ delivery.estimatedDeliveryDate | date:'short' }}</small>
+                    @if (delivery.actualDeliveryDate) {
+                      <br>
+                      <small class="text-success">
+                        Delivered: {{ delivery.actualDeliveryDate | date:'short' }}
+                      </small>
+                    }
+                  </td>
+                  <td>
+                    <div class="btn-group" role="group">
+                      @if (delivery.status === 'Pending') {
+                        <button class="btn btn-success btn-sm" (click)="acceptDelivery(delivery.id)" title="Accept Delivery">
+                          <i class="bi bi-check"></i>
+                        </button>
+                      }
+                      @if (delivery.status === 'InProgress') {
+                        <button class="btn btn-primary btn-sm" (click)="completeDelivery(delivery.id)" title="Complete Delivery">
+                          <i class="bi bi-check-circle"></i>
+                        </button>
+                      }
+                      <button class="btn btn-outline-secondary btn-sm" title="View Details">
+                        <i class="bi bi-eye"></i>
+                      </button>
+                    </div>
+                  </td>
+                </tr>
+              }
+            </tbody>
+          </table>
+        </div>
+      </div>
+    </div>
+  } @else if (!loading && !error) {
+    <div class="text-center py-5">
+      <i class="bi bi-inbox display-4 text-muted"></i>
+      <h4 class="mt-3 text-muted">No Delivery Orders</h4>
+      <p class="text-muted">You don't have any delivery orders assigned yet.</p>
+      <a routerLink="/delivery/dashboard" class="btn btn-primary">
+        <i class="bi bi-arrow-left me-2"></i>Back to Dashboard
+      </a>
+    </div>
+  }
+</div> 

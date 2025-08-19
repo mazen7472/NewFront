@@ -1,0 +1,250 @@
+<section class="compare contact py-5" id="compare">
+  <div class="container">
+    <!-- Title -->
+    <div class="text-center mb-4">
+      <h2 class="fw-bold section-title text-gradient">COMPARE PARTS</h2>
+      <p class="lead">
+        Pick <span class="text-primary fw-semibold">Two Products</span> to Compare
+      </p>
+    </div>
+
+    <!-- Step 1: Category Selection -->
+    <div
+      class="row justify-content-center mb-5 step-category"
+      *ngIf="!selectedCategory"
+      [@slideFadeIn]
+    >
+      <div class="col-md-6 text-center">
+        <label class="fw-semibold mb-3 text-primary fs-5">Select a Category</label>
+        <select
+          class="form-select shadow-sm border-primary"
+          [(ngModel)]="selectedCategory"
+          (change)="onCategoryChange()"
+        >
+          <option [ngValue]="null" disabled selected>-- Choose Category --</option>
+          <option *ngFor="let cat of categories" [value]="cat.name">
+            {{ cat.name }}
+          </option>
+        </select>
+      </div>
+    </div>
+
+    <!-- Step 2: Comparison Section (Visible after choosing category) -->
+    <div class="compare-process" *ngIf="selectedCategory" [@slideFadeIn]>
+      
+      <!-- Back Button -->
+      <div class="text-start mb-4">
+        <button class="btn btn-outline-secondary btn-sm shadow-sm"
+                (click)="selectedCategory = null">
+          ← Back to Categories
+        </button>
+      </div>
+
+      <!-- Error Message -->
+      <div *ngIf="error" class="alert alert-danger text-center mb-4">
+        {{ error }}
+      </div>
+
+      <!-- Loading Spinner -->
+      <div *ngIf="loading" class="text-center mb-4">
+        <div class="spinner-border text-primary" role="status"></div>
+        <p class="mt-2">Loading product details...</p>
+      </div>
+      
+      <!-- Products Row -->
+      <div class="row g-4 mb-5">
+        <!-- Product 1 -->
+        <div class="col-lg-6">
+          <label class="fw-semibold mb-2 text-primary">Select Product 1</label>
+          <select
+            class="form-select mb-3 shadow-sm"
+            (change)="onProductSelect(1, $event)"
+          >
+            <option value="">-- Choose Product --</option>
+            <option *ngFor="let product of filteredProducts1" [value]="product.id">
+              {{ product.name }}
+            </option>
+          </select>
+
+          <div *ngIf="selectedProduct1" class="product-card-custom mb-4 animate-card">
+            <img [src]="selectedProduct1.imageUrl" class="product-img" alt="Product 1"/>
+            <h5 class="fw-bold text-center mb-1">{{ selectedProduct1.name }}</h5>
+            <p class="text-center small mb-0">{{ selectedProduct1.description }}</p>
+          </div>
+        </div>
+
+        <!-- Product 2 -->
+        <div class="col-lg-6">
+          <label class="fw-semibold mb-2 text-primary">Select Product 2</label>
+          <select
+            class="form-select mb-3 shadow-sm"
+            (change)="onProductSelect(2, $event)"
+          >
+            <option value="">-- Choose Product --</option>
+            <option *ngFor="let product of filteredProducts2" [value]="product.id">
+              {{ product.name }}
+            </option>
+          </select>
+
+          <div *ngIf="selectedProduct2" class="product-card-custom mb-4 animate-card">
+            <img [src]="selectedProduct2.imageUrl" class="product-img" alt="Product 2"/>
+            <h5 class="fw-bold text-center mb-1">{{ selectedProduct2.name }}</h5>
+            <p class="text-center small mb-0">{{ selectedProduct2.description }}</p>
+          </div>
+        </div>
+      </div>
+
+      <!-- Step 3: Comparison Table -->
+      <div *ngIf="comparisonResults.length > 0" class="mt-5 animate-compare">
+        <!-- Keep your existing table + summary here -->
+      </div>
+    </div>
+    <!-- Comparison Table -->
+    <div *ngIf="comparisonResults.length > 0" class="mt-5">
+      <h4 class="text-center fw-bold mb-4 section-subtitle">Detailed Specifications Comparison</h4>
+      <div class="table-wrapper">
+        <table
+          class="table table-hover text-center align-middle custom-compare-table p-5"
+        >
+          <thead>
+            <tr>
+              <th>Specification</th>
+              <th>{{ selectedProduct1?.name }}</th>
+              <th>{{ selectedProduct2?.name }}</th>
+              <th>Comparison</th>
+              <th>Difference</th>
+            </tr>
+          </thead>
+          <tbody>
+            <tr *ngFor="let result of comparisonResults">
+              <td class="fw-semibold">{{ result.key }}</td>
+              <td
+                [ngClass]="{
+                  'text-white fw-semibold bg-success bg-opacity-10':
+                    result.better === selectedProduct1?.name,
+                  'text-danger fw-semibold bg-danger bg-opacity-10':
+                    result.better === selectedProduct2?.name
+                }"
+              >
+                {{ result.value1 }}
+              </td>
+              <td
+                [ngClass]="{
+                  'text-success fw-semibold bg-success bg-opacity-10':
+                    result.better === selectedProduct2?.name,
+                  'text-danger fw-semibold bg-danger bg-opacity-10':
+                    result.better === selectedProduct1?.name
+                }"
+              >
+                {{ result.value2 }}
+              </td>
+              <td>
+                @if (result.better) {
+                  <span class="badge bg-success">
+                    <i class="bi bi-check-circle me-1"></i>
+                    {{ result.better }}
+                  </span>
+                } @else if (result.comparison === 'Equal' || result.comparison.includes('Equal')) {
+                  <span class="badge bg-secondary">
+                    <i class="bi bi-dash-circle me-1"></i>
+                    Equal
+                  </span>
+                } @else {
+                  <span class="badge bg-info">
+                    <i class="bi bi-info-circle me-1"></i>
+                    Different
+                  </span>
+                }
+              </td>
+              <td>
+                @if (result.difference && result.difference !== 'N/A' && result.difference !== '0') {
+                  <span 
+                    class="badge"
+                    [ngClass]="{
+                      'bg-success': result.difference.startsWith('+') || result.difference.startsWith('-') && result.difference.includes('$'),
+                      'bg-warning': result.difference.startsWith('-') && !result.difference.includes('$'),
+                      'bg-info': !result.difference.startsWith('+') && !result.difference.startsWith('-')
+                    }"
+                  >
+                    {{ result.difference }}{{ result.unit }}
+                  </span>
+                } @else {
+                  <span class="text-muted small">{{ result.difference }}</span>
+                }
+              </td>
+            </tr>
+          </tbody>
+        </table>
+      </div>
+
+      <!-- Summary Section -->
+      <div class="row mt-4">
+        <div class="col-md-6">
+          <div class="card border-primary">
+            <div class="card-header bg-primary text-white">
+              <h5 class="mb-0">
+                <i class="bi bi-graph-up me-2"></i>
+                Performance Summary
+              </h5>
+            </div>
+            <div class="card-body">
+              @if (getPerformanceSummary(); as summary) {
+                <div class="d-flex justify-content-between align-items-center mb-2">
+                  <span>Better Specifications:</span>
+                  <span class="badge bg-success">{{ summary.betterCount }}</span>
+                </div>
+                <div class="d-flex justify-content-between align-items-center mb-2">
+                  <span>Equal Specifications:</span>
+                  <span class="badge bg-secondary">{{ summary.equalCount }}</span>
+                </div>
+                <div class="d-flex justify-content-between align-items-center">
+                  <span>Total Compared:</span>
+                  <span class="badge bg-info">{{ comparisonResults.length }}</span>
+                </div>
+              }
+            </div>
+          </div>
+        </div>
+        <div class="col-md-6">
+          <div class="card border-info">
+            <div class="card-header bg-info text-white">
+              <h5 class="mb-0">
+                <i class="bi bi-lightbulb me-2"></i>
+                Recommendation
+              </h5>
+            </div>
+            <div class="card-body">
+              @if (getRecommendation(); as recommendation) {
+                <p class="mb-2">{{ recommendation }}</p>
+                <div class="small text-muted">
+                  Based on {{ comparisonResults.length }} specifications compared
+                </div>
+              }
+            </div>
+          </div>
+        </div>
+      </div>
+
+      <div class="text-center mt-4">
+        <button
+          class="btn btn-outline-danger px-4 py-2 rounded-pill me-3"
+          (click)="resetComparison()"
+        >
+          Reset
+        </button>
+        <button
+          class="btn btn-outline-info px-4 py-2 rounded-pill me-3"
+          (click)="testComparison()"
+        >
+          Test API Comparison
+        </button>
+        <button
+          class="btn btn-outline-warning px-4 py-2 rounded-pill"
+          (click)="debugCategories()"
+        >
+          Debug Categories
+        </button>
+      </div>
+    </div>
+  </div>
+</section>

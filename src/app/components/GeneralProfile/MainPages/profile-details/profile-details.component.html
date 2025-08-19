@@ -1,0 +1,24 @@
+<div *ngIf="loading">Loading profile...</div>
+
+<div *ngIf="!loading && profile">
+  <h2>{{ profile.fullName }}</h2>
+  <p><strong>Email:</strong> {{ profile.email }}</p>
+  <p><strong>Username:</strong> {{ profile.userName }}</p>
+  <p><strong>Roles:</strong> {{ profile.roleNames.join(', ') }}</p>
+  <p><strong>Address:</strong> {{ profile.address }}, {{ profile.city }}, {{ profile.country }}</p>
+
+  <!-- Role-specific details -->
+  <div *ngIf="profile.roleNames.includes('Customer')">
+    <app-customer-profile-details [userId]="profile.userId"></app-customer-profile-details>
+  </div>
+
+  <div *ngIf="profile.roleNames.includes('TechCompany')">
+    <app-techcompany-profile-details [userId]="profile.userId"></app-techcompany-profile-details>
+  </div>
+
+  <div *ngIf="profile.roleNames.includes('DeliveryPerson')">
+    <app-deliveryperson-profile-details [userId]="profile.userId"></app-deliveryperson-profile-details>
+  </div>
+
+  <app-chat></app-chat>
+</div>

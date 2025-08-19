@@ -1,0 +1,71 @@
+<div class="dashboard-container">
+  <!-- Sidebar -->
+  <nav class="sidebar">
+    <div class="sidebar-header">
+      <div class="logo-container">
+        <i class="bi bi-speedometer2 logo-icon"></i>
+        <h5 class="logo-text">Tech Company Panel</h5>
+      </div>
+    </div>
+    
+    <!-- Navigation Menu -->
+    <ul class="nav flex-column">
+      <!-- Overview -->
+      <li class="nav-item">
+        <a class="nav-link" routerLink="/tech-company/overview" routerLinkActive="active">
+          <i class="bi bi-house me-3"></i> <span>Overview</span>
+        </a>
+      </li>
+
+      <!-- Product Management -->
+      <li class="nav-item">
+        <a class="nav-link" routerLink="/tech-company/products" routerLinkActive="active">
+          <i class="bi bi-box-seam me-3"></i> <span>My Products</span>
+        </a>
+      </li>
+
+      <li class="nav-item">
+        <a class="nav-link" routerLink="/tech-company/create-product" routerLinkActive="active">
+          <i class="bi bi-plus-circle me-3"></i> <span>Create Product</span>
+        </a>
+      </li>
+
+      <!-- Service Management -->
+      <li class="nav-item">
+        <a class="nav-link" routerLink="/tech-company/maintenance-requests" routerLinkActive="active">
+          <i class="bi bi-tools me-3"></i> <span>Maintenance</span>
+        </a>
+      </li>
+      <li class="nav-item">
+        <a class="nav-link" routerLink="/tech-company/pc-assemblies" routerLinkActive="active">
+          <i class="bi bi-cpu me-3"></i> <span>PC Assemblies</span>
+        </a>
+      </li>
+
+    </ul>
+
+   
+  </nav>
+
+  <!-- Main Content -->
+  <main class="content">
+    <!-- Content Header -->
+    <div class="content-header">
+      <div class="header-content">
+        <h1 class="page-title">Tech Company Dashboard</h1>
+        <p class="page-subtitle">Manage your Techperts Solutions platform</p>
+      </div>
+      <div class="header-actions">
+        <div class="date-display">
+          <i class="bi bi-calendar3 me-2"></i>
+          {{ currentDate | date: 'EEEE, MMMM d, y' }}
+        </div>
+      </div>
+    </div>
+
+    <!-- Router Outlet for Child Components -->
+    <div class="content-body">
+      <router-outlet></router-outlet>
+    </div>
+  </main>
+</div>

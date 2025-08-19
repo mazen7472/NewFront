@@ -1,0 +1,56 @@
+<div class="upload-page">
+  <h2>Upload Product Images</h2>
+
+  <div class="upload-card">
+    <!-- Main Image -->
+    <div class="file-group">
+      <label class="file-label">Main Image:</label>
+      <div class="file-dropzone" (click)="mainInput.click()">
+        <input type="file" #mainInput (change)="onMainImageSelected($event)" accept="image/*" hidden />
+        <div class="file-drop-content">
+          <i class="bi bi-cloud-arrow-up"></i>
+          @if (!selectedMainImage) {<span>Click or Drag to Upload Main Image</span>}
+          @if (selectedMainImage) {<span>{{ selectedMainImage.name }}</span>}
+        </div>
+      </div>
+
+      @if (selectedMainImage) {
+        <div class="preview">
+        <img [src]="selectedMainImage | filePreview" alt="Main Image Preview" />
+      </div>
+      }
+    </div>
+
+    <!-- Extra Images -->
+    <div class="file-group">
+      <label class="file-label">Extra Images:</label>
+      <div class="file-dropzone" (click)="extraInput.click()">
+        <input type="file" #extraInput (change)="onExtraImagesSelected($event)" accept="image/*" multiple hidden />
+        <div class="file-drop-content">
+          <i class="bi bi-images"></i>
+          @if (selectedExtraImages.length === 0) {<span>Click or Drag to Upload Extra Images</span>}
+          @if (selectedExtraImages.length > 0) {<span>{{ selectedExtraImages.length }} Images Selected</span>}
+        </div>
+      </div>
+
+      @if (selectedExtraImages.length > 0) {
+        <div class="preview-grid">
+            @for (img of selectedExtraImages; track $index) {
+                <div class="preview">
+                    <img [src]="img | filePreview" alt="Extra Image" />
+                    <span>{{ img.name }}</span>
+                </div>
+            }
+        </div>
+      }
+    </div>
+
+    <button class="upload-btn" (click)="uploadImages()" [disabled]="!selectedMainImage">
+      Upload Images
+    </button>
+
+    <button class="upload-btn secondary" (click)="goBack()">
+      Add Another Product
+    </button>
+  </div>
+</div>

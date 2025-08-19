@@ -1,0 +1,55 @@
+<div class="col">
+  <div class="card h-100 shadow-sm border-0 rounded-4 overflow-hidden position-relative">
+
+    <!-- Product Image -->
+    <img
+      [src]="productC.imageUrl"
+      class="card-img-top object-fit-cover"
+      [alt]="productC.name"
+      (error)="onImgError($event)"
+    />
+
+    <div class="card-body d-flex flex-column">
+      <!-- Product Name -->
+      <h5 class="card-title fw-semibold text-truncate">{{ productC.name }}</h5>
+
+      <!-- Product Description -->
+      <p class="card-text small mb-2 text-truncate">
+        {{ productC.description }}
+      </p>
+
+      <!-- Optional Title -->
+      <p class="mb-2" *ngIf="productC.title">
+        <small>{{ productC.title }}</small>
+      </p>
+
+      <!-- Price and External Link -->
+      <div class="d-flex justify-content-between align-items-center mb-3">
+        <span class="fw-bold text-primary fs-5">${{ productC.price }}</span>
+
+        <a
+          *ngIf="productC.link"
+          [href]="productC.link"
+          target="_blank"
+          class="btn btn-sm btn-outline-primary"
+        >
+          View
+        </a>
+      </div>
+
+
+      <!-- View Details Button -->
+      <a
+        (click)="goToProduct(productC.id)"
+        class="btn btn-sm btn-outline-primary w-100 mt-2"
+      >
+        <i class="bi bi-eye me-2"></i> View Details
+      </a>
+
+      <!-- Category Info -->
+      <p class="mt-3 mb-0 text-primary text-end small">
+        Category: {{ productC.categoryName || "Uncategorized" }}
+      </p>
+    </div>
+  </div>
+</div>

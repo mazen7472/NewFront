@@ -1,0 +1,181 @@
+<div class="container py-4">
+  <div class="row">
+    <div class="col-md-6 col-lg-4 mb-4" *ngFor="let customer of customers">
+      <div class="card customer-card shadow-sm">
+        <div class="card-body">
+          <h5 class="fw-bold mb-0">
+            <i class="bi bi-person-circle me-2"></i>{{ customer.fullName }}
+          </h5>
+          <p class="text-muted small mb-1">
+            <i class="bi bi-person-badge me-2"></i>{{ customer.userName }}
+          </p>
+          <p>
+            <i class="bi bi-envelope me-2"></i>{{ customer.email }}
+          </p>
+          <p>
+            <i class="bi bi-telephone me-2"></i>{{ customer.phoneNumber }}
+          </p>
+          <p *ngIf="customer.address">
+            <i class="bi bi-geo-alt me-2"></i>{{ customer.address }}
+          </p>
+
+          <div class="d-flex flex-wrap gap-2 mt-3">
+            <button
+              class="btn btn-modern btn-sm"
+              (click)="showDetails(customer)"
+            >
+              <i class="bi bi-eye me-1"></i> View Details
+            </button>
+            <button
+              class="btn btn-outline-warning btn-sm"
+              (click)="startEdit(customer)"
+            >
+              <i class="bi bi-pencil-square me-1"></i> Edit
+            </button>
+          </div>
+        </div>
+      </div>
+    </div>
+  </div>
+</div>
+
+<!-- Edit Form -->
+<div class="container mt-4" *ngIf="editingCustomer">
+  <div class="card shadow-sm">
+    <div class="card-body">
+      <h4 class="mb-3">
+        <i class="bi bi-pencil-square me-2"></i>Edit Customer
+      </h4>
+      <form (ngSubmit)="submitEdit()">
+        <div class="row g-3">
+          <div class="col-md-6">
+            <div class="input-group">
+              <span class="input-group-text"><i class="bi bi-person-badge"></i></span>
+              <input class="form-control" placeholder="Full Name" [(ngModel)]="editData.fullName" name="fullName" required />
+            </div>
+          </div>
+          <div class="col-md-6">
+            <div class="input-group">
+              <span class="input-group-text"><i class="bi bi-person-circle"></i></span>
+              <input class="form-control" placeholder="Username" [(ngModel)]="editData.userName" name="userName" required />
+            </div>
+          </div>
+          <div class="col-md-6">
+            <div class="input-group">
+              <span class="input-group-text"><i class="bi bi-envelope"></i></span>
+              <input class="form-control" placeholder="Email" [(ngModel)]="editData.email" name="email" required />
+            </div>
+          </div>
+          <div class="col-md-6">
+            <div class="input-group">
+              <span class="input-group-text"><i class="bi bi-telephone"></i></span>
+              <input class="form-control" placeholder="Phone" [(ngModel)]="editData.phoneNumber" name="phoneNumber" required />
+            </div>
+          </div>
+          <div class="col-md-6">
+            <div class="input-group">
+              <span class="input-group-text"><i class="bi bi-house-door"></i></span>
+              <input class="form-control" placeholder="Address" [(ngModel)]="editData.address" name="address" />
+            </div>
+          </div>
+          <div class="col-md-3">
+            <div class="input-group">
+              <span class="input-group-text"><i class="bi bi-geo-alt"></i></span>
+              <input class="form-control" placeholder="City" [(ngModel)]="editData.city" name="city" />
+            </div>
+          </div>
+          <div class="col-md-3">
+            <div class="input-group">
+              <span class="input-group-text"><i class="bi bi-globe2"></i></span>
+              <input class="form-control" placeholder="Country" [(ngModel)]="editData.country" name="country" />
+            </div>
+          </div>
+        </div>
+        <div class="mt-3">
+          <button class="btn btn-success me-2" type="submit">
+            <i class="bi bi-check-circle"></i> Save
+          </button>
+          <button class="btn btn-secondary" type="button" (click)="cancelEdit()">
+            <i class="bi bi-x-circle"></i> Cancel
+          </button>
+        </div>
+      </form>
+    </div>
+  </div>
+</div>
+
+<!-- Customer Details Modal -->
+<div
+  class="modal fade"
+  id="customerDetailsModal"
+  tabindex="-1"
+  aria-labelledby="customerDetailsModalLabel"
+  aria-hidden="true"
+  #detailsModal
+>
+  <div class="modal-dialog modal-dialog-centered modal-lg">
+    <div class="modal-content custom-modal">
+      <div class="modal-header">
+        <h4 class="mb-0">
+          <i class="bi bi-card-list me-2"></i>{{ selectedCustomer?.fullName }}’s Details
+        </h4>
+        <button
+          type="button"
+          class="btn-close"
+          (click)="closeDetails()"
+          aria-label="Close"
+        ></button>
+      </div>
+      <div class="modal-body details-grid">
+        <div class="details-item">
+          <label><i class="bi bi-person-badge me-2"></i>Username</label>
+          <span>{{ selectedCustomer?.userName }}</span>
+        </div>
+        <div class="details-item">
+          <label><i class="bi bi-envelope me-2"></i>Email</label>
+          <span>{{ selectedCustomer?.email }}</span>
+        </div>
+        <div class="details-item">
+          <label><i class="bi bi-telephone me-2"></i>Phone</label>
+          <span>{{ selectedCustomer?.phoneNumber }}</span>
+        </div>
+        <div class="details-item" *ngIf="selectedCustomer?.address">
+          <label><i class="bi bi-geo-alt me-2"></i>Address</label>
+          <span>{{ selectedCustomer?.address }}</span>
+        </div>
+        <div class="details-item">
+          <label><i class="bi bi-building me-2"></i>City</label>
+          <span>{{ selectedCustomer?.city }}</span>
+        </div>
+        <div class="details-item">
+          <label><i class="bi bi-flag me-2"></i>Country</label>
+          <span>{{ selectedCustomer?.country }}</span>
+        </div>
+        <div class="details-item">
+          <label><i class="bi bi-cart3 me-2"></i>Cart ID</label>
+          <span>{{ selectedCustomer?.cartId }}</span>
+        </div>
+        <div class="details-item">
+          <label><i class="bi bi-heart me-2"></i>Wishlist ID</label>
+          <span>{{ selectedCustomer?.wishListId }}</span>
+        </div>
+        <div class="details-item">
+          <label><i class="bi bi-truck me-2"></i>Delivery ID</label>
+          <span>{{ selectedCustomer?.deliveryId }}</span>
+        </div>
+        <div class="details-item">
+          <label><i class="bi bi-bag-check me-2"></i>Order Count</label>
+          <span>{{ selectedCustomer?.orderIds?.length }}</span>
+        </div>
+        <div class="details-item">
+          <label><i class="bi bi-tools me-2"></i>Maintenance Count</label>
+          <span>{{ selectedCustomer?.maintenanceIds?.length }}</span>
+        </div>
+        <div class="details-item">
+          <label><i class="bi bi-pc-display me-2"></i>PC Assemblies Count</label>
+          <span>{{ selectedCustomer?.pcAssemblyIds?.length }}</span>
+        </div>
+      </div>
+    </div>
+  </div>
+</div>

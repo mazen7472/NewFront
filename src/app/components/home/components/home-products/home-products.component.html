@@ -1,0 +1,26 @@
+<div class="container mt-5 featured-products">
+  <h2 class="section-title">Featured Products</h2>
+
+  <div *ngIf="loading" class="text-center">
+    <div class="spinner-border text-primary" role="status">
+      <span class="visually-hidden">Loading...</span>
+    </div>
+  </div>
+
+  @if (error) {
+    <div class="alert alert-danger text-center themed-alert">
+      {{ error }}
+    </div>
+  } @else if (!loading && !error) {
+    <div class="row">
+      @for (product of products; track product.id) {
+        <div class="col-md-6 col-lg-4 col-xl-3 mb-4">
+          <app-product-item 
+            [productC]="product" 
+            (addToCart)="onAddToCart($event)">
+          </app-product-item>
+        </div>
+      }
+    </div>
+  }
+</div>

@@ -1,0 +1,13 @@
+<div class="categories-section">
+  <h2 class="section-title">Categories</h2>
+  <div class="categories-container">
+    @for (category of categories; track category) {
+      <div class="category-card clickable">
+        <div class="icon-wrapper category-icon">
+          <img [src]="category.imageUrl" [alt]="category.label" class="category-img" />
+        </div>
+        <p class="category-label">{{ category.label }}</p>
+      </div>
+    }
+  </div>
+</div>
