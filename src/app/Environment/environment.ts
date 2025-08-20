@@ -7,7 +7,7 @@ export class Environment {
 
   static googleMapsApiKey: string = 'AIzaSyCIxRhuQT2XCwuNH9cpBMtUq8a5kbzc9LE'
 
-
+static stripePublicKey: string = 'pk_test_51Rwn7uC7LrcL50Sgy3jemleKmNPuMT7apQf5W4V335OJq6rn6LqSAViIgfKzgWhgnN5RC6ZrLQs76giC3ld4F45X00GrWPHc3A'; 
   static get baseUrl(): string {
     return this.useHttps ? this.httpsBaseUrl : this.httpBaseUrl;
   }

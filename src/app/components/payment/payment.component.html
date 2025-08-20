@@ -1,10 +1,178 @@
-<form [formGroup]="paymentForm" (ngSubmit)="pay()">
-  <label>Amount: <input type="number" formControlName="amount"></label>
-  <label>Currency: <input type="text" formControlName="currency"></label>
+<div class="payment-container">
+  <div class="container">
+    <!-- Header -->
+    <div class="text-center mb-4">
+      <h1 class="section-title">
+        <i class="bi bi-credit-card me-2"></i>
+        {{ isCartCheckout ? 'Complete Your Order' : 'Payment' }}
+      </h1>
+      <p class="section-subtitle">
+        {{ isCartCheckout ? 'Enter your payment details to complete your purchase' : 'Enter payment information' }}
+      </p>
+    </div>
 
-  <div #cardElement style="border: 1px solid #ccc; padding: 10px; margin-top: 10px;"></div>
+    <!-- Debug Info (Development Only) -->
+    <div class="debug-info mb-4" *ngIf="true">
+      <div class="card">
+        <div class="card-header">
+          <h3 class="card-title">
+            <i class="bi bi-bug me-2"></i>
+            Debug Information
+          </h3>
+        </div>
+        <div class="card-body">
+          <div class="row">
+            <div class="col-md-6">
+              <p><strong>Is Cart Checkout:</strong> {{ isCartCheckout }}</p>
+              <p><strong>Customer ID:</strong> {{ customerId || 'Not set' }}</p>
+              <p><strong>Cart Data:</strong> {{ cartData ? 'Loaded' : 'Not loaded' }}</p>
+              <p><strong>Stripe Card:</strong> {{ stripeCard ? 'Created' : 'Not created' }}</p>
+            </div>
+            <div class="col-md-6">
+              <p><strong>Form Valid:</strong> {{ paymentForm.valid }}</p>
+              <p><strong>Amount:</strong> {{ paymentForm.get('amount')?.value }}</p>
+              <p><strong>Currency:</strong> {{ paymentForm.get('currency')?.value }}</p>
+              <p><strong>Processing:</strong> {{ isProcessing }}</p>
+            </div>
+          </div>
+          <div class="row mt-3">
+            <div class="col-12">
+              <p><strong>Backend URL:</strong> {{ getBackendUrl() }}</p>
+              <p><strong>JWT Token:</strong> {{ getJwtTokenStatus() }}</p>
+            </div>
+          </div>
+          <div class="mt-3">
+            <button class="btn btn-sm btn-outline-info me-2" (click)="loadCartData()">
+              <i class="bi bi-arrow-clockwise me-1"></i>
+              Reload Cart Data
+            </button>
+            <button class="btn btn-sm btn-outline-warning me-2" (click)="clearCartData()">
+              <i class="bi bi-trash me-1"></i>
+              Clear Cart Data
+            </button>
+            <button class="btn btn-sm btn-outline-success" (click)="testBackendConnection()">
+              <i class="bi bi-wifi me-1"></i>
+              Test Backend Connection
+            </button>
+          </div>
+        </div>
+      </div>
+    </div>
 
-  <button type="submit" [disabled]="paymentForm.invalid">Pay</button>
-</form>
+    <!-- Cart Summary (if cart checkout) -->
+    <div *ngIf="isCartCheckout && cartData" class="cart-summary mb-4">
+      <div class="card">
+        <div class="card-header">
+          <h3 class="card-title">
+            <i class="bi bi-cart me-2"></i>
+            Order Summary
+          </h3>
+        </div>
+        <div class="card-body">
+          <div class="cart-items-summary">
+            <div *ngFor="let item of cartData.items" class="cart-item-summary">
+              <div class="item-info">
+                <span class="item-name">{{ item.productName }}</span>
+                <span class="item-quantity">x{{ item.quantity }}</span>
+              </div>
+              <span class="item-price">{{ item.price * item.quantity | currency:'USD' }}</span>
+            </div>
+          </div>
+          <div class="total-line">
+            <strong>Total: {{ cartData.total | currency:'USD' }}</strong>
+          </div>
+        </div>
+      </div>
+    </div>
 
-<p *ngIf="message">{{ message }}</p> 
+    <!-- Payment Form -->
+    <div class="payment-form-container">
+      <div class="card">
+        <div class="card-header">
+          <h3 class="card-title">
+            <i class="bi bi-credit-card me-2"></i>
+            Payment Details
+          </h3>
+        </div>
+        <div class="card-body">
+          <form [formGroup]="paymentForm" (ngSubmit)="pay()">
+            <!-- Amount and Currency (only show for generic payments) -->
+            <div *ngIf="!isCartCheckout" class="row mb-3">
+              <div class="col-md-6">
+                <label class="form-label">Amount</label>
+                <input 
+                  type="number" 
+                  class="form-control" 
+                  formControlName="amount"
+                  placeholder="Enter amount"
+                  step="0.01"
+                >
+              </div>
+              <div class="col-md-6">
+                <label class="form-label">Currency</label>
+                <input 
+                  type="text" 
+                  class="form-control" 
+                  formControlName="currency"
+                  placeholder="USD"
+                >
+              </div>
+            </div>
+
+            <!-- Delivery Address (only show for cart checkouts) -->
+            <!-- Removed: Not required for this checkout flow -->
+
+            <!-- Card Element -->
+            <div class="mb-3">
+              <label class="form-label">Card Information</label>
+              <div #cardElement class="stripe-card-element"></div>
+              <small class="text-muted">Test card: 4242 4242 4242 4242</small>
+            </div>
+
+            <!-- Submit Button -->
+            <button 
+              type="submit" 
+              class="btn btn-primary w-100"
+              [disabled]="paymentForm.invalid || isProcessing"
+            >
+              <ng-container *ngIf="!isProcessing; else processingSpinner">
+                <i class="bi bi-credit-card me-2"></i>
+                {{ isCartCheckout ? 'Complete Order' : 'Pay Now' }}
+              </ng-container>
+              <ng-template #processingSpinner>
+                <div class="spinner-border spinner-border-sm me-2" role="status">
+                  <span class="visually-hidden">Processing...</span>
+                </div>
+                Processing Payment...
+              </ng-template>
+            </button>
+          </form>
+        </div>
+      </div>
+    </div>
+
+    <!-- Status Messages -->
+    <div *ngIf="message" class="alert mt-3" [ngClass]="{
+      'alert-success': message.includes('✅'),
+      'alert-danger': message.includes('❌'),
+      'alert-warning': message.includes('⚠️'),
+      'alert-info': !message.includes('✅') && !message.includes('❌') && !message.includes('⚠️')
+    }">
+      <i class="bi me-2" [ngClass]="{
+        'bi-check-circle': message.includes('✅'),
+        'bi-x-circle': message.includes('❌'),
+        'bi-exclamation-triangle': message.includes('⚠️'),
+        'bi-info-circle': !message.includes('✅') && !message.includes('❌') && !message.includes('⚠️')
+      }"></i>
+      {{ message }}
+    </div>
+
+    <!-- Back to Cart Button (if cart checkout) -->
+    <div *ngIf="isCartCheckout" class="text-center mt-4">
+      <button class="btn btn-outline-secondary" routerLink="/cart">
+        <i class="bi bi-arrow-left me-2"></i>
+        Back to Cart
+      </button>
+    </div>
+  </div>
+</div> 

@@ -37,6 +37,7 @@ export const routes: Routes = [
   { path: 'forgot-password', loadComponent: () => import('./components/forgot-password/forgot-password.component').then(m => m.ForgotPasswordComponent), title: 'Forgot Password' },
 { path: 'reset-password', loadComponent: () => import('./components/reset-password/reset-password.component').then(m => m.ResetPasswordComponent), title: 'Reset Password' },
   { path: 'cart', loadComponent: () => import('./components/cart/cart.component').then(m => m.CartComponent), title: 'Cart', canActivate: [authGuard] },
+  { path: 'payment', loadComponent: () => import('./components/payment/payment.component').then(m => m.PaymentComponent), title: 'Payment', canActivate: [authGuard] },
 
   { path: 'pc-build', loadComponent: () => import('./components/pc-build/pc-build.component').then(m => m.PcBuildComponent), title: 'Creat PC Build', canActivate: [PcBuildGuard] },
   { path: 'selector', loadComponent: () => import('./components/pc-build/selector/selector.component').then(m => m.SelectorComponent), title: 'Component Selector', canActivate: [buildGuardGuard] },
